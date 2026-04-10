@@ -3,149 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lives In Motion | Broadcast Hub</title>
+    <title>Lives In Motion | The Diaspora Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --lim-green: #1C5E37; }
-        body { background: #fff; font-family: 'Inter', sans-serif; color: #1a1a1a; }
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .serif { font-family: 'Georgia', serif; }
         .bg-lim { background-color: var(--lim-green); }
         .text-lim { color: var(--lim-green); }
-        .briefing-card { border-bottom: 1px solid #eee; padding-bottom: 2rem; margin-bottom: 2rem; }
+        
+        #splash {
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%); z-index: 1000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: transform 1s cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        .culture-grid img { 
+            width: 100%; height: 400px; object-fit: cover; 
+            filter: grayscale(40%) sepia(20%); transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1); 
+        }
+        .culture-grid img:hover { filter: grayscale(0%) sepia(0%); transform: scale(1.05); z-index: 10; }
+
+        /* Scrollbar for Chat */
+        #chat-messages::-webkit-scrollbar { width: 4px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <script>
-        const CONFIG = {
-            PATREON_URL: "https://www.patreon.com/LivesInMotion",
-            AZURACAST_STREAM: "https://azuracast-nuremberg.myautodj.com/listen/station_8321_1775290855/radio.mp3",
-            // Note: The /play endpoint is used to stream the static file via API
-            NEWS_BULLETIN_API: "https://azuracast-nuremberg.myautodj.com/api/station/51/file/bulletin.mp3/play", 
-            FEATURED_INTERVIEW_API: "https://azuracast-nuremberg.myautodj.com/api/station/51/file/15417/play" 
-        };
-    </script>
+    <div id="splash">
+        <div class="text-center p-6">
+            <h1 class="text-7xl font-black italic mb-2 tracking-tighter uppercase">Lives <span class="text-lim">In</span> Motion</h1>
+            <p class="serif text-slate-400 mb-12 tracking-widest uppercase text-xs">UK Independent Diaspora Radio</p>
+            <button onclick="enterStation()" class="group relative px-12 py-5 overflow-hidden border border-white transition-all">
+                <span class="relative z-10 font-black uppercase tracking-[0.4em] group-hover:text-black transition-colors">Enter The Square</span>
+                <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            </button>
+        </div>
+    </div>
 
-    <header class="bg-white border-b-8 border-black px-8 py-10 text-center md:text-left">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
-                <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
-                <p class="serif text-xl text-slate-500 mt-2">UK Independent Broadcast Home.</p>
-            </div>
-            <div class="flex gap-4">
-                <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Town Square Feed</a>
-            </div>
+    <header class="p-8 flex justify-between items-center border-b border-white/10 sticky top-0 bg-black/80 backdrop-blur-md z-40">
+        <h2 class="text-2xl font-black italic uppercase tracking-tighter">LIM <span class="text-lim">Radio</span></h2>
+        <div class="flex items-center gap-6">
+            <audio id="radio-player" class="h-8 w-48 md:w-64" controls src="https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3"></audio>
+            <a href="https://www.patreon.com/YOUR_ACCOUNT" class="hidden md:block text-[10px] font-black uppercase border border-lim px-4 py-2 hover:bg-lim transition">Join Patreon</a>
         </div>
     </header>
 
-    <nav class="sticky top-0 z-50 bg-black text-white px-8 py-4 shadow-2xl">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6">
-            <div class="flex items-center gap-3">
-                <span class="w-2 h-3 bg-red-600 rounded-full animate-pulse"></span>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em]">Live Stream</span>
-            </div>
-            <audio id="main-audio-player" class="w-full h-8" controls></audio>
-            <div class="md:text-right flex-1 cursor-pointer group" onclick="playAudio('bulletin')">
-                <p id="on-air-now" class="text-xs font-bold text-lim uppercase tracking-widest">Connected</p>
-                <p class="text-[9px] text-slate-400 font-bold uppercase group-hover:text-white transition underline">Listen to latest 3m AI Bulletin</p>
-            </div>
-        </div>
-    </nav>
-
-    <main class="max-w-6xl mx-auto py-16 px-6 grid lg:grid-cols-12 gap-16">
-        <div class="lg:col-span-7">
-            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-10 border-b pb-4">Editorial Briefings</h2>
-            <div id="briefing-container">
-                </div>
-
-            <div class="mt-20 p-10 bg-slate-900 text-white rounded-br-[4rem] shadow-xl">
-                <span class="text-[10px] font-bold text-lim uppercase tracking-widest">Narratives</span>
-                <h3 class="serif text-3xl font-bold mt-4 mb-6 italic">Featured Interview: Diaspora Diaries</h3>
-                <button onclick="playAudio('interview')" class="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-lim hover:text-white transition shadow-lg">
-                    <i class="fa-solid fa-play mr-2"></i> Launch Audio
-                </button>
-            </div>
-        </div>
-
-        <aside class="lg:col-span-5">
-            <div class="bg-slate-50 p-8 border-t-4 border-black sticky top-32">
-                <h3 class="text-xs font-black uppercase tracking-[0.3em] mb-8 italic">Broadcast Schedule</h3>
-                <div id="schedule-list" class="space-y-4 text-sm mb-10">
-                    </div>
-                <div class="bg-black text-white p-6 rounded-lg text-center">
-                    <p class="text-[10px] font-bold uppercase mb-4 opacity-60 tracking-widest">Support Independent Radio</p>
-                    <button onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="w-full bg-lim py-4 font-black text-xs uppercase tracking-widest hover:scale-105 transition">Join our Patreon</button>
+    <main>
+        <section class="grid md:grid-cols-3 gap-1 p-1 culture-grid">
+            <div class="relative overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1534260322277-996599bcc339?auto=format&fit=crop&q=80&w=800" alt="Culture">
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-xs font-black uppercase tracking-widest border-b-2">The Daily News</span>
                 </div>
             </div>
-        </aside>
+            <div class="relative overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1523413551509-5f21f0043199?auto=format&fit=crop&q=80&w=800" alt="Identity">
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-xs font-black uppercase tracking-widest border-b-2">Diaspora Diaries</span>
+                </div>
+            </div>
+            <div class="relative overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?auto=format&fit=crop&q=80&w=800" alt="Textiles">
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-xs font-black uppercase tracking-widest border-b-2">Couchpieces</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto py-32 px-6">
+            <div class="border-l-4 border-lim pl-8">
+                <h3 class="serif text-5xl font-bold mb-8 leading-tight">We broadcast identity, culture, and community across borders.</h3>
+                <p class="serif text-xl text-slate-400 leading-relaxed italic">The Square is more than a radio station; it is a digital home for the UK Nigerian Diaspora. A place for validation, correction, and storytelling.</p>
+            </div>
+        </section>
     </main>
 
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="chat-btn" onclick="toggleChat()" class="bg-lim text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-xl hover:rotate-12 transition transform active:scale-95">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
+
+        <div id="chat-window" class="hidden absolute bottom-16 right-0 w-[320px] h-[450px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden text-black transition-all">
+            <div class="bg-lim text-white p-5 flex justify-between items-center">
+                <div>
+                    <p class="text-xs font-black uppercase tracking-widest">Square Concierge</p>
+                    <p class="text-[9px] opacity-80 uppercase">AI-Powered Assistant</p>
+                </div>
+                <button onclick="toggleChat()" class="hover:rotate-90 transition">×</button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50">
+                <div class="bg-slate-200 p-3 rounded-tr-xl rounded-bl-xl rounded-br-xl text-xs leading-relaxed">
+                    Eku abo! (Welcome!) I'm the Lives In Motion AI. Ask me about our <b>show schedule</b>, how to <b>listen</b>, or our <b>mission</b>.
+                </div>
+            </div>
+
+            <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Ask anything..." class="flex-1 text-xs p-3 bg-slate-100 rounded-full outline-none focus:ring-2 focus:ring-lim/20 transition">
+                <button onclick="handleChat()" class="text-lim px-2 hover:scale-110 transition"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const player = document.getElementById('main-audio-player');
-
-        function playAudio(type) {
-            let url = "";
-            let label = "";
-            const cacheBuster = "?t=" + new Date().getTime();
-
-            if (type === 'bulletin') {
-                url = CONFIG.NEWS_BULLETIN_API + cacheBuster;
-                label = "PLAYING: LATEST NEWS BULLETIN";
-            } else if (type === 'interview') {
-                url = CONFIG.FEATURED_INTERVIEW_API;
-                label = "PLAYING: DIASPORA DIARIES";
-            } else {
-                url = CONFIG.AZURACAST_STREAM;
-                label = "ON AIR: LIVE STREAM";
-            }
-
-            player.pause();
-            player.src = url;
-            player.type = "audio/mpeg"; 
-            player.load();
-            player.play().catch(() => { 
-                document.getElementById('on-air-now').innerText = "TAP PLAY TO HEAR"; 
-            });
-            document.getElementById('on-air-now').innerText = label;
+        const player = document.getElementById('radio-player');
+        
+        function enterStation() {
+            player.play();
+            const splash = document.getElementById('splash');
+            splash.style.transform = 'translateY(-100%)';
+            setTimeout(() => splash.style.display = 'none', 1000);
         }
 
-        async function fetchNews() {
-            try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://rss.punchng.com/v1/category/latest_news')}`);
-                const data = await res.json();
-                document.getElementById('briefing-container').innerHTML = data.items.slice(0, 3).map(item => `
-                    <article class="briefing-card">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">${new Date().toLocaleDateString('en-GB')}</p>
-                        <h3 class="serif text-2xl font-bold mb-4">${item.title}</h3>
-                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-lim transition">Expand Briefing →</a>
-                    </article>`).join('');
-            } catch (e) {
-                console.log("RSS Feed currently offline.");
-            }
+        function toggleChat() {
+            const win = document.getElementById('chat-window');
+            win.classList.toggle('hidden');
         }
 
-        function initSchedule() {
-            const list = [
-                { name: "LIM Daily News", time: "Hourly", days: "Mon-Sun" },
-                { name: "Couchpieces", time: "07:00 & 19:00", days: "Mon-Sun" },
-                { name: "Diaspora Diaries", time: "11:00", days: "Sat/Wed" },
-                { name: "Walk in God's Light", time: "15:00", days: "Sun/Thu" },
-                { name: "Truth Be Told", time: "19:00", days: "Sun/Tue" }
-            ];
-            document.getElementById('schedule-list').innerHTML = list.map(s => `
-                <div class="flex justify-between border-b border-slate-200 pb-3">
-                    <p class="font-black uppercase text-[10px]">${s.name}</p>
-                    <p class="font-bold text-[10px]">${s.time}</p>
-                </div>`).join('');
+        function appendMessage(role, text) {
+            const msg = document.createElement('div');
+            const isUser = role === 'user';
+            msg.className = isUser 
+                ? "bg-lim text-white p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl text-xs ml-8 shadow-sm"
+                : "bg-slate-200 text-black p-3 rounded-tr-xl rounded-bl-xl rounded-br-xl text-xs mr-8 shadow-sm";
+            msg.innerHTML = text;
+            const container = document.getElementById('chat-messages');
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
         }
 
-        window.onload = () => {
-            player.src = CONFIG.AZURACAST_STREAM;
-            fetchNews();
-            initSchedule();
-            document.getElementById('on-air-now').innerText = "ON AIR: LIVE STREAM";
-        };
+        function handleChat() {
+            const input = document.getElementById('chat-input');
+            const query = input.value.trim().toLowerCase();
+            if (!query) return;
+
+            appendMessage('user', input.value);
+            input.value = '';
+
+            // --- FREE AI LOGIC (Rule-based with AI-like personality) ---
+            setTimeout(() => {
+                let response = "That's a great question! I'm still learning the specifics of that, but you can always catch our <b>Daily News Bulletin every hour</b> on the dot.";
+
+                if (query.includes('schedule') || query.includes('shows')) {
+                    response = "<b>Broadcast Schedule:</b><br>• Daily News: Hourly<br>• Couchpieces: 7am/7pm Daily<br>• Truth Be Told: Sun 7pm<br>• Walk in God's Light: Sun 3pm";
+                } else if (query.includes('listen')) {
+                    response = "You're listening right now! Just use the player at the top of the Square. We also stream to AzuraCast and mobile browsers.";
+                } else if (query.includes('hello') || query.includes('hi')) {
+                    response = "Bawo ni! (Hello!) How can I assist you in the Square today?";
+                } else if (query.includes('mission') || query.includes('what is this')) {
+                    response = "Lives In Motion is the UK's independent home for diaspora narratives. We validate our culture and correct misconceptions through high-quality talk radio.";
+                } else if (query.includes('patreon') || query.includes('support')) {
+                    response = "We love our supporters! You can join our Patreon by clicking the link in the top menu or the sidebar. It helps us stay independent.";
+                }
+
+                appendMessage('bot', response);
+            }, 600);
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleChat();
+        });
     </script>
 </body>
 </html>
