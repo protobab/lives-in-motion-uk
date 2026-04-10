@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lives In Motion | The Diaspora Journal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --lim-green: #1C5E37; }
+        body { background: #fff; font-family: 'Georgia', serif; color: #1a1a1a; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .bg-lim { background-color: var(--lim-green); }
+        .border-lim { border-color: var(--lim-green); }
+        .hero-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); }
+    </style>
+</head>
+<body>
 
+    <header class="py-8 border-b-4 border-black px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="sans text-6xl font-black tracking-tighter mb-2 uppercase italic">Lives <span class="text-slate-400 font-light">In</span> Motion</h1>
+            <p class="sans text-xs uppercase tracking-[0.5em] font-bold text-slate-500">The British-Nigerian Editorial Journal</p>
+        </div>
+    </header>
+
+    <nav class="sans sticky top-0 z-50 bg-white border-b py-4 px-6 flex justify-center gap-8 text-xs font-black uppercase tracking-widest">
+        <a href="#" class="hover:text-green-700">Interviews</a>
+        <a href="#" class="hover:text-green-700">Business</a>
+        <a href="#" class="hover:text-green-700">Culture</a>
+        <a href="https://diasporainmotion.com" class="text-green-700 border-b-2 border-green-700">Town Square Live →</a>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6">
+        <section class="grid md:grid-cols-12 gap-0 border-b-2 border-black mb-12 group cursor-pointer">
+            <div class="md:col-span-8 overflow-hidden relative h-[500px]">
+                <img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1200" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000">
+                <div class="absolute inset-0 hero-gradient"></div>
+                <div class="absolute bottom-10 left-10 right-10">
+                    <span class="sans bg-white text-black px-3 py-1 text-[10px] font-bold uppercase mb-4 inline-block">Featured Story</span>
+                    <h2 class="text-5xl font-bold text-white leading-tight">Navigating the UK: A Guide for the Modern Nigerian Professional</h2>
+                </div>
+            </div>
+            <div class="md:col-span-4 p-10 bg-slate-50 flex flex-col justify-center">
+                <p class="sans text-xs font-bold text-green-700 uppercase mb-4">Edition 01 • April 2026</p>
+                <p class="text-xl leading-relaxed mb-6 italic">"The transition is more than physical; it is cultural, financial, and emotional."</p>
+                <button class="sans text-xs font-black border-b-2 border-black pb-1 self-start hover:text-green-700 hover:border-green-700 transition">READ THE ESSAY</button>
+            </div>
+        </section>
+
+        <div class="grid md:grid-cols-3 gap-12">
+            <article class="space-y-4">
+                <div class="h-64 bg-slate-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl font-bold leading-tight">The Tech Corridor: Lagos to London</h3>
+                <p class="sans text-sm text-slate-600">How Nigerian tech talent is reshaping the Silicon Roundabout.</p>
+                <a href="#" class="sans text-[10px] font-black uppercase tracking-widest text-green-700 inline-block">Culture →</a>
+            </article>
+
+            <article class="space-y-4">
+                <div class="h-64 bg-slate-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl font-bold leading-tight">A Taste of Home: Best Naija Spots in the UK</h3>
+                <p class="sans text-sm text-slate-600">From Peckham to Manchester, the culinary map of the diaspora.</p>
+                <a href="#" class="sans text-[10px] font-black uppercase tracking-widest text-green-700 inline-block">Lifestyle →</a>
+            </article>
+
+            <article class="space-y-4">
+                <div class="h-64 bg-slate-200 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1454165833762-01953e58be1d?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl font-bold leading-tight">Investment 101: Buying Back Home</h3>
+                <p class="sans text-sm text-slate-600">Securing your future in Nigeria while building your life abroad.</p>
+                <a href="#" class="sans text-[10px] font-black uppercase tracking-widest text-green-700 inline-block">Finance →</a>
+            </article>
+        </div>
+    </main>
+
+    <footer class="mt-20 border-t-4 border-black p-12 text-center sans bg-slate-50">
+        <h4 class="text-2xl font-black uppercase italic mb-4">Lives In Motion</h4>
+        <p class="text-xs text-slate-500 mb-8 tracking-widest">© 2026 THE DIASPORA JOURNAL. ALL RIGHTS RESERVED.</p>
+        <div class="flex justify-center gap-6">
+            <a href="https://patreon.com/YOUR_URL" class="bg-black text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-green-800 transition">Subscribe to Patreon</a>
+        </div>
+    </footer>
+
+</body>
+</html>
