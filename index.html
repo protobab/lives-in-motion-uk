@@ -7,96 +7,151 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --lim-green: #1C5E37; --deep-slate: #0f172a; }
-        body { background: #fafafa; font-family: 'Inter', sans-serif; color: var(--deep-slate); }
+        :root { --lim-green: #1C5E37; }
+        body { background: #fff; font-family: 'Inter', sans-serif; color: #1a1a1a; }
         .serif { font-family: 'Georgia', serif; }
         .bg-lim { background-color: var(--lim-green); }
-        .text-lim { color: var(--lim-green); }
-        .broadcast-card { transition: all 0.3s ease; border-left: 4px solid transparent; }
-        .broadcast-card:hover { border-left: 4px solid var(--lim-green); background: #fff; transform: translateX(5px); }
+        .schedule-row { border-bottom: 1px solid #eee; transition: background 0.3s; }
+        .schedule-row:hover { background: #f9fafb; }
+        .ai-badge { background: linear-gradient(90deg, #1C5E37, #2ecc71); color: white; padding: 2px 8px; border-radius: 4px; font-size: 9px; font-weight: 900; }
     </style>
 </head>
 <body>
 
-    <header class="bg-white border-b-8 border-slate-900 px-8 py-12">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-end gap-6">
-            <div class="max-w-2xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-12 h-12 bg-lim rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-tower-broadcast text-xl"></i></div>
-                    <span class="font-black tracking-[0.3em] text-[10px] uppercase text-slate-400">Independent Radio • UK based</span>
+    <header class="bg-white border-b-8 border-black px-8 py-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
+                    <p class="serif text-xl text-slate-500 mt-2">The UK's Independent Home for Diaspora Stories.</p>
                 </div>
-                <h1 class="text-6xl font-black tracking-tighter italic uppercase leading-none mb-6">Lives <span class="text-lim">In</span> Motion</h1>
-                <p class="serif text-2xl text-slate-600 leading-relaxed italic">"Validating the experience of those living between two homes."</p>
-            </div>
-            <div class="flex gap-4">
-                <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-slate-900 px-6 py-3 hover:bg-slate-900 hover:text-white transition">Town Square Feed</a>
+                <div class="flex gap-4">
+                    <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Town Square Live →</a>
+                </div>
             </div>
         </div>
     </header>
 
-    <section class="bg-slate-900 text-white py-10 px-8 sticky top-0 z-50 shadow-2xl">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
-            <div class="flex items-center gap-4">
-                <div class="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
-                <span class="font-black text-xs uppercase tracking-[0.2em]">Live on Air</span>
+    <nav class="sticky top-0 z-50 bg-black text-white px-8 py-4 shadow-2xl">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6">
+            <div class="flex items-center gap-3 min-w-max">
+                <span class="w-2 h-2 bg-red-600 rounded-full animate-ping"></span>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em]">Live Stream</span>
             </div>
-            <div class="flex-1">
-                <audio id="main-stream" class="w-full h-10 accent-green-600" controls src="https://azuracast-nuremberg.myautodj.com/listen/station_8321_1775290855/radio.mp3"></audio>
-            </div>
-            <div class="text-right">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Currently Tuning</p>
-                <p class="text-sm font-bold">Diaspora Identity & Culture Talk</p>
+            <audio id="stream" class="w-full h-8" controls src="https://azuracast-nuremberg.myautodj.com/listen/station_8321_1775290855/radio.mp3"></audio>
+            <div class="hidden md:block text-right min-w-max">
+                <p id="current-show" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">LIM Daily News</p>
+                <p class="text-xs font-bold text-lim">3 min AI-Curated Bulletin</p>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <main class="max-w-5xl mx-auto py-20 px-8">
-        <div class="grid md:grid-cols-12 gap-16">
+    <main class="max-w-6xl mx-auto py-16 px-6">
+        <div class="grid lg:grid-cols-12 gap-16">
             
-            <div class="md:col-span-7 space-y-12">
-                <div>
-                    <h2 class="text-xs font-black uppercase tracking-[0.3em] text-lim mb-8">Narratives & Stories</h2>
-                    
-                    <article class="broadcast-card p-6 mb-8 cursor-pointer">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase">Series: Home & Away</span>
-                        <h3 class="serif text-3xl font-bold mt-2 mb-4">Between Lagos and London: The Dual-Identity Burden</h3>
-                        <p class="text-slate-600 leading-relaxed mb-4">Exploring the psychological shift that happens at 30,000 feet. We speak to professionals navigating the "middle" space.</p>
-                        <button class="text-[10px] font-black uppercase tracking-widest text-lim"><i class="fa-solid fa-play mr-2"></i> Listen to Segment</button>
+            <div class="lg:col-span-7">
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-10 border-b pb-4">The Journal / Narratives</h2>
+                
+                <div id="blog-container" class="space-y-16">
+                    <article>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="ai-badge">AI INSIGHT</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">April 10, 2026</span>
+                        </div>
+                        <h3 class="serif text-4xl font-bold leading-tight mb-4 hover:text-lim cursor-pointer transition">The Economic Pulse of the UK-Nigerian Corridor</h3>
+                        <p class="serif text-lg text-slate-600 leading-relaxed mb-6">A deep analysis of remittance trends and professional migration patterns in early 2026, generated from our hourly news data...</p>
+                        <div class="flex items-center gap-4">
+                            <button class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1">Read Full Briefing</button>
+                        </div>
                     </article>
 
-                    <article class="broadcast-card p-6 cursor-pointer">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase">Series: Community Building</span>
-                        <h3 class="serif text-3xl font-bold mt-2 mb-4">Correcting the Lens: Diaspora Media as a Truth-Teller</h3>
-                        <p class="text-slate-600 leading-relaxed mb-4">Why independent broadcasting is essential for correcting misconceptions about the UK Nigerian experience.</p>
-                        <button class="text-[10px] font-black uppercase tracking-widest text-lim"><i class="fa-solid fa-play mr-2"></i> Listen to Segment</button>
+                    <article>
+                        <div class="mb-3">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Featured Interview</span>
+                        </div>
+                        <h3 class="serif text-4xl font-bold leading-tight mb-4 hover:text-lim cursor-pointer transition">Between Homes: A Conversation with Diaspora Diaries</h3>
+                        <p class="serif text-lg text-slate-600 leading-relaxed mb-6">"I never realized I was Nigerian until I landed in Heathrow." In our latest long-form interview, we explore the identity shift...</p>
+                        <button class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1">Listen to Segment</button>
                     </article>
                 </div>
             </div>
 
-            <aside class="md:col-span-5">
-                <div class="bg-lim text-white p-10 rounded-br-[4rem] shadow-xl mb-12">
-                    <h3 class="font-black text-xl mb-6 italic">Our Mission</h3>
-                    <p class="serif text-lg leading-relaxed mb-8 opacity-90">
-                        To give diaspora communities a dedicated, high-quality broadcast home — one that validates their lived experience and builds meaningful community across borders.
-                    </p>
-                    <a href="https://patreon.com/YOUR_URL" target="_blank" class="inline-block bg-white text-lim px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest shadow-lg">Support Independent Radio</a>
-                </div>
+            <aside class="lg:col-span-5">
+                <div class="bg-slate-50 p-8 border-t-4 border-black shadow-sm">
+                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-900 mb-8 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-week"></i> Broadcast Schedule
+                    </h3>
+                    
+                    <div class="space-y-0 text-sm">
+                        <div class="schedule-row py-4 flex justify-between items-start">
+                            <div>
+                                <p class="font-black uppercase text-[11px]">LIM Daily News</p>
+                                <p class="text-[10px] text-slate-500 italic">Fully Automated AI Bulletin</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold">Hourly</p>
+                                <p class="text-[9px] text-slate-400">Mon–Sun</p>
+                            </div>
+                        </div>
 
-                <div class="border-t-2 border-slate-200 pt-8">
-                    <h4 class="text-xs font-black uppercase tracking-widest mb-6">Upcoming Talk Segments</h4>
-                    <ul class="space-y-4 text-sm font-bold">
-                        <li class="flex justify-between border-b pb-2"><span>Financially Active Diaspora</span> <span class="text-slate-400">14:00</span></li>
-                        <li class="flex justify-between border-b pb-2"><span>Cultural Preservation UK</span> <span class="text-slate-400">16:30</span></li>
-                        <li class="flex justify-between border-b pb-2"><span>Identity & Heritage</span> <span class="text-slate-400">19:00</span></li>
-                    </ul>
+                        <div class="schedule-row py-4 flex justify-between items-start">
+                            <div>
+                                <p class="font-black uppercase text-[11px]">Couchpieces</p>
+                                <p class="text-[10px] text-slate-500 italic">Pre-recorded / Replay</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold">7:00 AM/PM</p>
+                                <p class="text-[9px] text-slate-400">Mon–Sun</p>
+                            </div>
+                        </div>
+
+                        <div class="schedule-row py-4 flex justify-between items-start bg-green-50/50">
+                            <div>
+                                <p class="font-black uppercase text-[11px] text-lim">Diaspora Diaries</p>
+                                <p class="text-[10px] text-slate-500 italic">Featured Interview</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold">11:00 AM</p>
+                                <p class="text-[9px] text-slate-400">Saturday</p>
+                            </div>
+                        </div>
+
+                        <div class="schedule-row py-4 flex justify-between items-start">
+                            <div>
+                                <p class="font-black uppercase text-[11px]">Walk in God's Light</p>
+                                <p class="text-[10px] text-slate-500 italic">30m Live Q&A</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold">3:00 PM</p>
+                                <p class="text-[9px] text-slate-400">Sunday</p>
+                            </div>
+                        </div>
+
+                        <div class="schedule-row py-4 flex justify-between items-start">
+                            <div>
+                                <p class="font-black uppercase text-[11px]">Truth Be Told</p>
+                                <p class="text-[10px] text-slate-500 italic">Live Interview</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold">7:00 PM</p>
+                                <p class="text-[9px] text-slate-400">Sunday</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 bg-black text-white p-6 text-center">
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-60">Patreon Members</p>
+                        <h4 class="text-sm font-bold mb-4">Access On-Demand Archive</h4>
+                        <a href="YOUR_PATREON_URL" class="inline-block border border-white text-[10px] font-black px-4 py-2 hover:bg-white hover:text-black transition uppercase tracking-widest">Enter Square</a>
+                    </div>
                 </div>
             </aside>
         </div>
     </main>
 
-    <footer class="bg-slate-900 text-white p-16 text-center">
-        <p class="text-[10px] font-black tracking-[0.5em] uppercase opacity-50 mb-4">Lives In Motion Radio</p>
-        <p class="serif text-slate-400 italic">London • Lagos • The World</p>
+    <footer class="bg-white border-t p-12 text-center">
+        <p class="text-[9px] font-black tracking-[0.5em] uppercase text-slate-400 mb-2">Lives In Motion Radio</p>
+        <p class="serif italic text-slate-500">Broadcasting Identity, Culture, and Community across borders.</p>
     </footer>
 
 </body>
