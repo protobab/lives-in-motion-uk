@@ -1,0 +1,40 @@
+name: Generate Daily AI Briefing
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Runs at 9:00 AM Daily
+    - cron: '0 18 * * *' # Runs at 6:00 PM Daily (The "Later Update")
+  workflow_dispatch:      # Allows you to run it manually for testing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Generate Content
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          TIME=$(date +'%H:%M')
+          FILENAME="content/briefings/briefing-${DATE}-${TIME//:/}.md"
+          
+          echo "---" > $FILENAME
+          echo "title: 'Daily Diaspora Briefing: ${DATE} (${TIME})'" >> $FILENAME
+          echo "date: '${DATE}'" >> $FILENAME
+          echo "type: 'AI-Insight'" >> $FILENAME
+          echo "---" >> $FILENAME
+          echo "### The Diaspora Pulse for ${DATE}" >> $FILENAME
+          echo "Generated at ${TIME} GMT." >> $FILENAME
+          echo "This is your daily editorial update curated from the Lives In Motion News Stream." >> $FILENAME
+          echo "" >> $FILENAME
+          echo "#### Today's Headlines & Insights" >> $FILENAME
+          echo "- **UK-Nigeria Economic Shift:** Analyzing the latest remittance and migration trends." >> $FILENAME
+          echo "- **Culture Spotlight:** Why diaspora talk radio is the new town square." >> $FILENAME
+          
+      - name: Commit and Push
+        run: |
+          git config --global user.name "LIM-AI-Producer"
+          git config --global user.email "producer@livesinmotion.co.uk"
+          git add .
+          git commit -m "New AI Briefing for $(date)"
+          git push
