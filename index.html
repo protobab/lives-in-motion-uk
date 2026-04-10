@@ -13,36 +13,40 @@
         .bg-lim { background-color: var(--lim-green); }
         .text-lim { color: var(--lim-green); }
         
-        /* The Entrance Splash */
         #splash {
             position: fixed; inset: 0; background: var(--lim-green); z-index: 1000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: all 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        /* Auto-Scrolling Photo Strip */
         .photo-strip {
-            display: flex; gap: 10px; width: 200%;
-            animation: scroll 40s linear infinite;
+            display: flex; gap: 10px; width: 400%;
+            animation: scroll 60s linear infinite;
         }
         @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        .photo-strip img { height: 350px; width: 500px; object-fit: cover; border-radius: 4px; }
-
-        /* Chat Window */
-        #chat-window { bottom: 85px; right: 20px; width: 320px; height: 450px; }
+        .photo-strip img { height: 300px; width: 450px; object-fit: cover; border-radius: 8px; border: 4px solid #000; }
     </style>
 </head>
 <body>
 
+    <script>
+        const CONFIG = {
+            PATREON_URL: "https://www.patreon.com/YOUR_PATREON_PATH", // UPDATE THIS
+            RADIO_URL: "https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3"
+        };
+    </script>
+
     <div id="splash">
-        <div class="text-center text-white">
-            <h1 class="text-7xl font-black italic mb-4 tracking-tighter uppercase">Lives <span class="text-black">In</span> Motion</h1>
-            <p class="serif text-xl mb-12 opacity-80 uppercase tracking-widest">The Square is Open.</p>
-            <button onclick="enterSquare()" class="bg-black text-white px-12 py-5 font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
-                Enter & Listen Live
+        <div class="text-center text-white p-6">
+            <h1 class="text-6xl md:text-8xl font-black italic mb-4 tracking-tighter uppercase">Lives <span class="text-black">In</span> Motion</h1>
+            <p class="serif text-xl mb-12 opacity-90 uppercase tracking-[0.4em]">The Square is Open</p>
+            
+            <button onclick="enterSquare()" class="group relative bg-black text-white px-16 py-6 overflow-hidden">
+                <span class="relative z-10 font-black uppercase tracking-[0.3em] group-hover:text-lim transition-colors">Enter & Listen Live</span>
+                <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
             </button>
         </div>
     </div>
@@ -53,38 +57,53 @@
                 <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
                 <p class="serif text-xl text-slate-500 mt-2">UK Independent Broadcast Home.</p>
             </div>
-            <div class="flex items-center gap-4">
-                <audio id="radio-player" class="h-10" controls src="https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3"></audio>
+            <div class="flex items-center gap-6">
+                <audio id="radio-player" src="https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3" preload="auto"></audio>
+                
+                <div class="flex items-center bg-black text-white rounded-full px-6 py-2 gap-4">
+                    <button onclick="toggleRadio()" id="play-btn" class="text-lim text-xl">
+                        <i class="fa-solid fa-circle-pause"></i>
+                    </button>
+                    <span class="text-[10px] font-black uppercase tracking-widest animate-pulse">Live Stream</span>
+                </div>
+
+                <a href="javascript:void(0)" onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="bg-lim text-white text-[10px] font-black uppercase px-6 py-3 hover:bg-black transition">
+                    Support on Patreon
+                </a>
             </div>
         </div>
     </header>
 
-    <div class="overflow-hidden bg-black py-4 border-y-4 border-black">
+    <div class="overflow-hidden bg-slate-100 py-6 border-b-4 border-black">
         <div class="photo-strip">
-            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?auto=format&fit=crop&q=80&w=800" alt="Lagos Life">
-            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?auto=format&fit=crop&q=80&w=800" alt="Culture">
-            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=800" alt="Diaspora">
-            <img src="https://images.unsplash.com/photo-1523413551509-5f21f0043199?auto=format&fit=crop&q=80&w=800" alt="Market">
-            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?auto=format&fit=crop&q=80&w=800" alt="Lagos Life">
-            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?auto=format&fit=crop&q=80&w=800" alt="Culture">
+            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Culture">
+            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=800" alt="Textiles">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800" alt="Music">
+            <img src="https://images.unsplash.com/photo-1523413551509-5f21f0043199?w=800" alt="Market">
+            <img src="https://images.unsplash.com/photo-1534260322277-996599bcc339?w=800" alt="Lagos">
+            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Culture">
+            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=800" alt="Textiles">
         </div>
     </div>
 
     <main class="max-w-6xl mx-auto py-16 px-6 grid lg:grid-cols-12 gap-16">
         <div class="lg:col-span-8">
-            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-8 border-b pb-4">Daily Briefings</h2>
-            <div id="briefing-container" class="space-y-12">
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-8 border-b pb-4">Latest Briefings</h2>
+            <div id="briefing-container" class="space-y-12 italic">
                 </div>
         </div>
 
         <aside class="lg:col-span-4">
-            <div class="sticky top-10">
-                <div class="bg-lim text-white p-8 rounded-br-[3rem] mb-8 shadow-xl">
-                    <h3 class="font-black text-sm uppercase mb-4 tracking-widest">Our Mission</h3>
-                    <p class="serif text-lg italic opacity-90">Validating the diaspora experience, correcting misconceptions, and building community.</p>
+            <div class="sticky top-10 space-y-8">
+                <div class="bg-black text-white p-8 rounded-tr-[3rem]">
+                    <h3 class="font-black text-xs uppercase mb-4 tracking-widest text-lim">The Mission</h3>
+                    <p class="serif text-lg leading-relaxed">Correcting misconceptions and validating the diaspora experience through high-quality independent talk radio.</p>
                 </div>
-                <div id="schedule-list" class="bg-slate-50 p-6 border-l-4 border-black space-y-4">
-                    </div>
+                <div class="bg-slate-50 p-6 border-l-4 border-lim">
+                    <p class="text-[10px] font-black uppercase mb-4">Live Schedule</p>
+                    <div id="schedule-list" class="space-y-3 text-xs font-bold uppercase">
+                        </div>
+                </div>
             </div>
         </aside>
     </main>
@@ -93,29 +112,40 @@
         <button onclick="toggleChat()" class="bg-black text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-xl hover:bg-lim transition">
             <i class="fa-solid fa-robot"></i>
         </button>
-        <div id="chat-window" class="hidden fixed bg-white rounded-2xl shadow-2xl flex flex-col border border-slate-200 overflow-hidden text-black">
-            <div class="bg-black text-white p-4 font-black text-[10px] uppercase tracking-widest flex justify-between">
+        <div id="chat-window" class="hidden fixed bottom-24 right-6 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col text-black">
+            <div class="bg-black text-white p-4 font-black text-[10px] uppercase flex justify-between">
                 <span>Square Concierge</span>
                 <button onclick="toggleChat()">×</button>
             </div>
-            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 text-xs">
-                <p class="bg-white p-3 border rounded-lg shadow-sm">Welcome to the <b>Lives In Motion Square</b>. I can help you with showtimes or explain our mission. What are you looking for today?</p>
+            <div id="chat-messages" class="flex-1 p-4 h-64 overflow-y-auto text-xs space-y-3 bg-slate-50">
+                <p class="bg-white p-2 border rounded shadow-sm">Welcome to the Square. How can I help you today?</p>
             </div>
-            <div class="p-3 bg-white border-t flex gap-2">
-                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 text-xs outline-none p-2">
+            <div class="p-3 border-t flex gap-2">
+                <input type="text" id="chat-input" placeholder="Ask about the schedule..." class="flex-1 outline-none text-xs">
                 <button onclick="handleChat()" class="text-lim"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
     <script>
-        const player = document.getElementById('radio-player');
-        
+        const audio = document.getElementById('radio-player');
+        const playBtn = document.getElementById('play-btn');
+
         function enterSquare() {
-            player.play(); // Fixed: Audio starts on click
-            const splash = document.getElementById('splash');
-            splash.style.transform = 'translateY(-100%)';
-            setTimeout(() => splash.style.display = 'none', 1000);
+            // THE TRIGGER: Start audio and hide splash
+            audio.play();
+            document.getElementById('splash').style.transform = 'translateY(-100%)';
+            setTimeout(() => document.getElementById('splash').style.display = 'none', 1000);
+        }
+
+        function toggleRadio() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerHTML = '<i class="fa-solid fa-circle-pause"></i>';
+            } else {
+                audio.pause();
+                playBtn.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
+            }
         }
 
         function toggleChat() {
@@ -125,27 +155,23 @@
         function handleChat() {
             const input = document.getElementById('chat-input');
             const container = document.getElementById('chat-messages');
-            if (!input.value) return;
+            if(!input.value) return;
 
-            // User message
             const uMsg = document.createElement('p');
-            uMsg.className = "bg-lim text-white p-3 rounded-lg self-end ml-10 shadow-sm";
+            uMsg.className = "bg-lim text-white p-2 rounded self-end ml-6";
             uMsg.innerText = input.value;
             container.appendChild(uMsg);
 
-            // Bot logic
-            const q = input.value.toLowerCase();
             setTimeout(() => {
                 const bMsg = document.createElement('p');
-                bMsg.className = "bg-white p-3 border rounded-lg shadow-sm mr-10";
-                
-                if (q.includes('schedule')) bMsg.innerHTML = "<b>Today's Schedule:</b><br>• News: Hourly<br>• Couchpieces: 7pm<br>• Truth Be Told: Sun 7pm";
-                else if (q.includes('mission')) bMsg.innerText = "We are an independent radio station focused on high-quality talk for the Nigerian diaspora in the UK.";
-                else bMsg.innerText = "I'm still learning the specifics! You can catch our live stream 24/7 right here in the Square.";
-                
+                bMsg.className = "bg-white p-2 border rounded mr-6";
+                const q = input.value.toLowerCase();
+                if(q.includes('schedule')) bMsg.innerHTML = "Daily News: Hourly<br>Couchpieces: 7pm Daily";
+                else if(q.includes('patreon')) bMsg.innerText = "Click the 'Support on Patreon' button in the top right to help us!";
+                else bMsg.innerText = "I'm the Square Concierge, here to guide you through Lives In Motion.";
                 container.appendChild(bMsg);
                 container.scrollTop = container.scrollHeight;
-            }, 600);
+            }, 500);
             input.value = '';
         }
 
@@ -153,20 +179,17 @@
             const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://rss.punchng.com/v1/category/latest_news')}`);
             const data = await res.json();
             document.getElementById('briefing-container').innerHTML = data.items.slice(0, 3).map(item => `
-                <article class="border-b pb-8">
-                    <p class="text-[10px] font-black text-lim uppercase tracking-widest mb-2">Editorial Briefing</p>
+                <article>
                     <h3 class="serif text-3xl font-bold mb-4 hover:text-lim transition cursor-pointer">${item.title}</h3>
-                    <p class="serif text-lg text-slate-500 mb-4 italic">Analysis: Reflecting the changing landscape of our global community...</p>
-                    <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:border-lim transition">Read Full Perspective →</a>
+                    <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase border-b-2 border-black pb-1 hover:text-lim transition">View Perspective →</a>
                 </article>`).join('');
         }
 
         window.onload = () => {
             fetchNews();
             document.getElementById('schedule-list').innerHTML = `
-                <p class="text-[10px] font-black uppercase border-b pb-2">Today in the Square</p>
-                <div class="text-xs font-bold py-2 border-b flex justify-between"><span>Daily News</span><span>HOURLY</span></div>
-                <div class="text-xs font-bold py-2 border-b flex justify-between"><span>Couchpieces</span><span>19:00</span></div>
+                <div class="flex justify-between border-b pb-2"><span>News</span><span>Hourly</span></div>
+                <div class="flex justify-between border-b pb-2"><span>Couchpieces</span><span>19:00</span></div>
             `;
         };
     </script>
