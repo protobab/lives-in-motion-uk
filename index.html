@@ -3,87 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lives In Motion | The Diaspora Journal</title>
+    <title>Lives In Motion | Independent Diaspora Radio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --lim-green: #1C5E37; }
-        body { background: #fff; font-family: 'Georgia', serif; color: #1a1a1a; }
-        .sans { font-family: 'Inter', sans-serif; }
+        :root { --lim-green: #1C5E37; --deep-slate: #0f172a; }
+        body { background: #fafafa; font-family: 'Inter', sans-serif; color: var(--deep-slate); }
+        .serif { font-family: 'Georgia', serif; }
         .bg-lim { background-color: var(--lim-green); }
-        .border-lim { border-color: var(--lim-green); }
-        .hero-gradient { background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); }
+        .text-lim { color: var(--lim-green); }
+        .broadcast-card { transition: all 0.3s ease; border-left: 4px solid transparent; }
+        .broadcast-card:hover { border-left: 4px solid var(--lim-green); background: #fff; transform: translateX(5px); }
     </style>
 </head>
 <body>
 
-    <header class="py-8 border-b-4 border-black px-6">
-        <div class="max-w-6xl mx-auto text-center">
-            <h1 class="sans text-6xl font-black tracking-tighter mb-2 uppercase italic">Lives <span class="text-slate-400 font-light">In</span> Motion</h1>
-            <p class="sans text-xs uppercase tracking-[0.5em] font-bold text-slate-500">The British-Nigerian Editorial Journal</p>
+    <header class="bg-white border-b-8 border-slate-900 px-8 py-12">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-end gap-6">
+            <div class="max-w-2xl">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-lim rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-tower-broadcast text-xl"></i></div>
+                    <span class="font-black tracking-[0.3em] text-[10px] uppercase text-slate-400">Independent Radio • UK based</span>
+                </div>
+                <h1 class="text-6xl font-black tracking-tighter italic uppercase leading-none mb-6">Lives <span class="text-lim">In</span> Motion</h1>
+                <p class="serif text-2xl text-slate-600 leading-relaxed italic">"Validating the experience of those living between two homes."</p>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-slate-900 px-6 py-3 hover:bg-slate-900 hover:text-white transition">Town Square Feed</a>
+            </div>
         </div>
     </header>
 
-    <nav class="sans sticky top-0 z-50 bg-white border-b py-4 px-6 flex justify-center gap-8 text-xs font-black uppercase tracking-widest">
-        <a href="#" class="hover:text-green-700">Interviews</a>
-        <a href="#" class="hover:text-green-700">Business</a>
-        <a href="#" class="hover:text-green-700">Culture</a>
-        <a href="https://diasporainmotion.com" class="text-green-700 border-b-2 border-green-700">Town Square Live →</a>
-    </nav>
+    <section class="bg-slate-900 text-white py-10 px-8 sticky top-0 z-50 shadow-2xl">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+            <div class="flex items-center gap-4">
+                <div class="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
+                <span class="font-black text-xs uppercase tracking-[0.2em]">Live on Air</span>
+            </div>
+            <div class="flex-1">
+                <audio id="main-stream" class="w-full h-10 accent-green-600" controls src="https://YOUR_AZURACAST_URL/radio/8000/radio.mp3"></audio>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Currently Tuning</p>
+                <p class="text-sm font-bold">Diaspora Identity & Culture Talk</p>
+            </div>
+        </div>
+    </section>
 
-    <main class="max-w-6xl mx-auto p-6">
-        <section class="grid md:grid-cols-12 gap-0 border-b-2 border-black mb-12 group cursor-pointer">
-            <div class="md:col-span-8 overflow-hidden relative h-[500px]">
-                <img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1200" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000">
-                <div class="absolute inset-0 hero-gradient"></div>
-                <div class="absolute bottom-10 left-10 right-10">
-                    <span class="sans bg-white text-black px-3 py-1 text-[10px] font-bold uppercase mb-4 inline-block">Featured Story</span>
-                    <h2 class="text-5xl font-bold text-white leading-tight">Navigating the UK: A Guide for the Modern Nigerian Professional</h2>
+    <main class="max-w-5xl mx-auto py-20 px-8">
+        <div class="grid md:grid-cols-12 gap-16">
+            
+            <div class="md:col-span-7 space-y-12">
+                <div>
+                    <h2 class="text-xs font-black uppercase tracking-[0.3em] text-lim mb-8">Narratives & Stories</h2>
+                    
+                    <article class="broadcast-card p-6 mb-8 cursor-pointer">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Series: Home & Away</span>
+                        <h3 class="serif text-3xl font-bold mt-2 mb-4">Between Lagos and London: The Dual-Identity Burden</h3>
+                        <p class="text-slate-600 leading-relaxed mb-4">Exploring the psychological shift that happens at 30,000 feet. We speak to professionals navigating the "middle" space.</p>
+                        <button class="text-[10px] font-black uppercase tracking-widest text-lim"><i class="fa-solid fa-play mr-2"></i> Listen to Segment</button>
+                    </article>
+
+                    <article class="broadcast-card p-6 cursor-pointer">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Series: Community Building</span>
+                        <h3 class="serif text-3xl font-bold mt-2 mb-4">Correcting the Lens: Diaspora Media as a Truth-Teller</h3>
+                        <p class="text-slate-600 leading-relaxed mb-4">Why independent broadcasting is essential for correcting misconceptions about the UK Nigerian experience.</p>
+                        <button class="text-[10px] font-black uppercase tracking-widest text-lim"><i class="fa-solid fa-play mr-2"></i> Listen to Segment</button>
+                    </article>
                 </div>
             </div>
-            <div class="md:col-span-4 p-10 bg-slate-50 flex flex-col justify-center">
-                <p class="sans text-xs font-bold text-green-700 uppercase mb-4">Edition 01 • April 2026</p>
-                <p class="text-xl leading-relaxed mb-6 italic">"The transition is more than physical; it is cultural, financial, and emotional."</p>
-                <button class="sans text-xs font-black border-b-2 border-black pb-1 self-start hover:text-green-700 hover:border-green-700 transition">READ THE ESSAY</button>
-            </div>
-        </section>
 
-        <div class="grid md:grid-cols-3 gap-12">
-            <article class="space-y-4">
-                <div class="h-64 bg-slate-200 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
+            <aside class="md:col-span-5">
+                <div class="bg-lim text-white p-10 rounded-br-[4rem] shadow-xl mb-12">
+                    <h3 class="font-black text-xl mb-6 italic">Our Mission</h3>
+                    <p class="serif text-lg leading-relaxed mb-8 opacity-90">
+                        To give diaspora communities a dedicated, high-quality broadcast home — one that validates their lived experience and builds meaningful community across borders.
+                    </p>
+                    <a href="https://patreon.com/YOUR_URL" target="_blank" class="inline-block bg-white text-lim px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest shadow-lg">Support Independent Radio</a>
                 </div>
-                <h3 class="text-2xl font-bold leading-tight">The Tech Corridor: Lagos to London</h3>
-                <p class="sans text-sm text-slate-600">How Nigerian tech talent is reshaping the Silicon Roundabout.</p>
-                <a href="#" class="sans text-[10px] font-black uppercase tracking-widest text-green-700 inline-block">Culture →</a>
-            </article>
 
-            <article class="space-y-4">
-                <div class="h-64 bg-slate-200 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
+                <div class="border-t-2 border-slate-200 pt-8">
+                    <h4 class="text-xs font-black uppercase tracking-widest mb-6">Upcoming Talk Segments</h4>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li class="flex justify-between border-b pb-2"><span>Financially Active Diaspora</span> <span class="text-slate-400">14:00</span></li>
+                        <li class="flex justify-between border-b pb-2"><span>Cultural Preservation UK</span> <span class="text-slate-400">16:30</span></li>
+                        <li class="flex justify-between border-b pb-2"><span>Identity & Heritage</span> <span class="text-slate-400">19:00</span></li>
+                    </ul>
                 </div>
-                <h3 class="text-2xl font-bold leading-tight">A Taste of Home: Best Naija Spots in the UK</h3>
-                <p class="sans text-sm text-slate-600">From Peckham to Manchester, the culinary map of the diaspora.</p>
-                <a href="#" class="sans text-[10px] font-black uppercase tracking-widest text-green-700 inline-block">Lifestyle →</a>
-            </article>
-
-            <article class="space-y-4">
-                <div class="h-64 bg-slate-200 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1454165833762-01953e58be1d?auto=format&fit=crop&w=800" class="w-full h-full object-cover">
-                </div>
-                <h3 class="text-2xl font-bold leading-tight">Investment 101: Buying Back Home</h3>
-                <p class="sans text-sm text-slate-600">Securing your future in Nigeria while building your life abroad.</p>
-                <a href="#" class="sans text-[10px] font-black uppercase tracking-widest text-green-700 inline-block">Finance →</a>
-            </article>
+            </aside>
         </div>
     </main>
 
-    <footer class="mt-20 border-t-4 border-black p-12 text-center sans bg-slate-50">
-        <h4 class="text-2xl font-black uppercase italic mb-4">Lives In Motion</h4>
-        <p class="text-xs text-slate-500 mb-8 tracking-widest">© 2026 THE DIASPORA JOURNAL. ALL RIGHTS RESERVED.</p>
-        <div class="flex justify-center gap-6">
-            <a href="https://patreon.com/YOUR_URL" class="bg-black text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-green-800 transition">Subscribe to Patreon</a>
-        </div>
+    <footer class="bg-slate-900 text-white p-16 text-center">
+        <p class="text-[10px] font-black tracking-[0.5em] uppercase opacity-50 mb-4">Lives In Motion Radio</p>
+        <p class="serif text-slate-400 italic">London • Lagos • The World</p>
     </footer>
 
 </body>
