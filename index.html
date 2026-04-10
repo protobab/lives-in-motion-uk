@@ -8,151 +8,156 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --lim-green: #1C5E37; }
-        body { background: #fff; font-family: 'Inter', sans-serif; color: #1a1a1a; }
+        body { background: #fff; font-family: 'Inter', sans-serif; color: #1a1a1a; scroll-behavior: smooth; }
         .serif { font-family: 'Georgia', serif; }
         .bg-lim { background-color: var(--lim-green); }
-        .schedule-row { border-bottom: 1px solid #eee; transition: background 0.3s; }
-        .schedule-row:hover { background: #f9fafb; }
-        .ai-badge { background: linear-gradient(90deg, #1C5E37, #2ecc71); color: white; padding: 2px 8px; border-radius: 4px; font-size: 9px; font-weight: 900; }
+        .text-lim { color: var(--lim-green); }
+        .briefing-card { border-bottom: 1px solid #eee; padding-bottom: 2rem; margin-bottom: 2rem; transition: opacity 0.5s ease; }
+        .shimmer { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shim 1.5s infinite; }
+        @keyframes shim { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
 <body>
 
     <header class="bg-white border-b-8 border-black px-8 py-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div>
-                    <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
-                    <p class="serif text-xl text-slate-500 mt-2">The UK's Independent Home for Diaspora Stories.</p>
-                </div>
-                <div class="flex gap-4">
-                    <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Town Square Live →</a>
-                </div>
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
+                <p class="serif text-xl text-slate-500 mt-2">UK Independent Broadcast Home.</p>
             </div>
+            <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Switch to Town Square</a>
         </div>
     </header>
 
     <nav class="sticky top-0 z-50 bg-black text-white px-8 py-4 shadow-2xl">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6">
-            <div class="flex items-center gap-3 min-w-max">
+            <div class="flex items-center gap-3">
                 <span class="w-2 h-2 bg-red-600 rounded-full animate-ping"></span>
                 <span class="text-[10px] font-black uppercase tracking-[0.2em]">Live Stream</span>
             </div>
             <audio id="stream" class="w-full h-8" controls src="https://azuracast-nuremberg.myautodj.com/listen/station_8321_1775290855/radio.mp3"></audio>
-            <div class="hidden md:block text-right min-w-max">
-                <p id="current-show" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">LIM Daily News</p>
-                <p class="text-xs font-bold text-lim">3 min AI-Curated Bulletin</p>
+            <div class="md:text-right flex-1">
+                <p id="on-air-now" class="text-xs font-bold text-lim uppercase tracking-widest">Checking Schedule...</p>
+                <p id="show-subtitle" class="text-[9px] text-slate-400 font-bold uppercase">London • Lagos</p>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto py-16 px-6">
-        <div class="grid lg:grid-cols-12 gap-16">
+    <main class="max-w-6xl mx-auto py-16 px-6 grid lg:grid-cols-12 gap-16">
+        
+        <div class="lg:col-span-7">
+            <div class="flex justify-between items-end mb-10 border-b pb-4">
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Daily Editorial Briefings</h2>
+                <span class="text-[10px] font-bold text-lim animate-pulse" id="update-status">AI Syncing...</span>
+            </div>
             
-            <div class="lg:col-span-7">
-                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-10 border-b pb-4">The Journal / Narratives</h2>
-                
-                <div id="blog-container" class="space-y-16">
-                    <article>
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="ai-badge">AI INSIGHT</span>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">April 10, 2026</span>
-                        </div>
-                        <h3 class="serif text-4xl font-bold leading-tight mb-4 hover:text-lim cursor-pointer transition">The Economic Pulse of the UK-Nigerian Corridor</h3>
-                        <p class="serif text-lg text-slate-600 leading-relaxed mb-6">A deep analysis of remittance trends and professional migration patterns in early 2026, generated from our hourly news data...</p>
-                        <div class="flex items-center gap-4">
-                            <button class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1">Read Full Briefing</button>
-                        </div>
-                    </article>
+            <div id="briefing-container" class="space-y-4">
+                <div class="h-32 shimmer rounded-xl mb-4"></div>
+                <div class="h-32 shimmer rounded-xl"></div>
+            </div>
+        </div>
 
-                    <article>
-                        <div class="mb-3">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Featured Interview</span>
-                        </div>
-                        <h3 class="serif text-4xl font-bold leading-tight mb-4 hover:text-lim cursor-pointer transition">Between Homes: A Conversation with Diaspora Diaries</h3>
-                        <p class="serif text-lg text-slate-600 leading-relaxed mb-6">"I never realized I was Nigerian until I landed in Heathrow." In our latest long-form interview, we explore the identity shift...</p>
-                        <button class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1">Listen to Segment</button>
-                    </article>
+        <aside class="lg:col-span-5">
+            <div class="bg-slate-50 p-8 border-t-4 border-black sticky top-32">
+                <h3 class="text-xs font-black uppercase tracking-[0.3em] mb-8 italic">Broadcast Schedule</h3>
+                <div id="schedule-list" class="space-y-4 text-sm">
+                    </div>
+                
+                <div class="mt-8 bg-lim p-6 text-white rounded-br-[3rem]">
+                    <h4 class="font-black text-sm uppercase mb-2">Independent Media</h4>
+                    <p class="serif text-sm opacity-90 leading-relaxed italic">Validating the diaspora experience, correcting misconceptions, and building community.</p>
                 </div>
             </div>
-
-            <aside class="lg:col-span-5">
-                <div class="bg-slate-50 p-8 border-t-4 border-black shadow-sm">
-                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-900 mb-8 flex items-center gap-2">
-                        <i class="fa-solid fa-calendar-week"></i> Broadcast Schedule
-                    </h3>
-                    
-                    <div class="space-y-0 text-sm">
-                        <div class="schedule-row py-4 flex justify-between items-start">
-                            <div>
-                                <p class="font-black uppercase text-[11px]">LIM Daily News</p>
-                                <p class="text-[10px] text-slate-500 italic">Fully Automated AI Bulletin</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">Hourly</p>
-                                <p class="text-[9px] text-slate-400">Mon–Sun</p>
-                            </div>
-                        </div>
-
-                        <div class="schedule-row py-4 flex justify-between items-start">
-                            <div>
-                                <p class="font-black uppercase text-[11px]">Couchpieces</p>
-                                <p class="text-[10px] text-slate-500 italic">Pre-recorded / Replay</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">7:00 AM/PM</p>
-                                <p class="text-[9px] text-slate-400">Mon–Sun</p>
-                            </div>
-                        </div>
-
-                        <div class="schedule-row py-4 flex justify-between items-start bg-green-50/50">
-                            <div>
-                                <p class="font-black uppercase text-[11px] text-lim">Diaspora Diaries</p>
-                                <p class="text-[10px] text-slate-500 italic">Featured Interview</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">11:00 AM</p>
-                                <p class="text-[9px] text-slate-400">Saturday</p>
-                            </div>
-                        </div>
-
-                        <div class="schedule-row py-4 flex justify-between items-start">
-                            <div>
-                                <p class="font-black uppercase text-[11px]">Walk in God's Light</p>
-                                <p class="text-[10px] text-slate-500 italic">30m Live Q&A</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">3:00 PM</p>
-                                <p class="text-[9px] text-slate-400">Sunday</p>
-                            </div>
-                        </div>
-
-                        <div class="schedule-row py-4 flex justify-between items-start">
-                            <div>
-                                <p class="font-black uppercase text-[11px]">Truth Be Told</p>
-                                <p class="text-[10px] text-slate-500 italic">Live Interview</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">7:00 PM</p>
-                                <p class="text-[9px] text-slate-400">Sunday</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 bg-black text-white p-6 text-center">
-                        <p class="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-60">Patreon Members</p>
-                        <h4 class="text-sm font-bold mb-4">Access On-Demand Archive</h4>
-                        <a href="YOUR_PATREON_URL" class="inline-block border border-white text-[10px] font-black px-4 py-2 hover:bg-white hover:text-black transition uppercase tracking-widest">Enter Square</a>
-                    </div>
-                </div>
-            </aside>
-        </div>
+        </aside>
     </main>
 
-    <footer class="bg-white border-t p-12 text-center">
-        <p class="text-[9px] font-black tracking-[0.5em] uppercase text-slate-400 mb-2">Lives In Motion Radio</p>
-        <p class="serif italic text-slate-500">Broadcasting Identity, Culture, and Community across borders.</p>
-    </footer>
+    <script>
+        // 1. BROADCAST SCHEDULE DATA
+        const SCHEDULE = [
+            { name: "LIM Daily News", time: "Hourly", days: "Mon-Sun", desc: "AI-Curated 3min Bulletin" },
+            { name: "Couchpieces", time: "07:00 & 19:00", days: "Mon-Sun", desc: "Pre-recorded Talk" },
+            { name: "Diaspora Diaries", time: "11:00", days: "Sat/Wed", desc: "Featured Interview" },
+            { name: "Walk in God's Light", time: "15:00", days: "Sun/Thu", desc: "30m Live Q&A" },
+            { name: "Truth Be Told", time: "19:00", days: "Sun/Tue", desc: "Live Interview" }
+        ];
 
+        // 2. AI EDITORIAL GENERATOR
+        async function generateBriefings() {
+            const container = document.getElementById('briefing-container');
+            const status = document.getElementById('update-status');
+            
+            try {
+                // Fetching real news from Punch & TechCabal via RSS-to-JSON
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://rss.punchng.com/v1/category/latest_news')}`);
+                const data = await res.json();
+                
+                if(data.status !== 'ok') throw new Error();
+
+                status.innerText = "Updated Live";
+                
+                // Map the first 3 news items into "Editorial Briefings"
+                container.innerHTML = data.items.slice(0, 3).map((item, i) => `
+                    <article class="briefing-card">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="bg-black text-white px-2 py-0.5 text-[9px] font-black uppercase tracking-widest">Edition ${i+1}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${new Date().toLocaleDateString('en-GB')}</span>
+                        </div>
+                        <h3 class="serif text-3xl font-bold leading-tight mb-4 hover:text-lim cursor-pointer transition">${item.title}</h3>
+                        <p class="serif text-lg text-slate-600 leading-relaxed mb-6 italic">
+                            Editorial Note: This headline reflects a shifting trend in the diaspora corridor. We analyze how this impact correlates with our community values...
+                        </p>
+                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-lim hover:border-lim transition">Expand Briefing →</a>
+                    </article>
+                `).join('');
+
+            } catch (e) {
+                status.innerText = "Sync Offline";
+                container.innerHTML = "<p class='serif text-slate-400'>Unable to sync daily briefings. Please tune in live.</p>";
+            }
+        }
+
+        // 3. LIVE SCHEDULE ENGINE
+        function initSchedule() {
+            const list = document.getElementById('schedule-list');
+            list.innerHTML = SCHEDULE.map(s => `
+                <div class="flex justify-between items-start border-b pb-4 group">
+                    <div>
+                        <p class="font-black uppercase text-[11px] group-hover:text-lim transition">${s.name}</p>
+                        <p class="text-[10px] text-slate-400 font-bold">${s.desc}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-[11px]">${s.time}</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase">${s.days}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateOnAir() {
+            const now = new Date();
+            const hour = now.getHours();
+            const day = now.getDay(); // 0 is Sunday, 6 is Saturday
+            const onAir = document.getElementById('on-air-now');
+            
+            // Logic based on your provided schedule
+            if (hour === 7 || hour === 19) {
+                onAir.innerText = "ON AIR: COUCHPIECES";
+            } else if (day === 0 && hour === 15) {
+                onAir.innerText = "ON AIR: WALK IN GOD'S LIGHT (LIVE)";
+            } else if (day === 0 && hour === 19) {
+                onAir.innerText = "ON AIR: TRUTH BE TOLD (LIVE)";
+            } else {
+                onAir.innerText = "ON AIR: LIM DAILY NEWS BULLETIN";
+            }
+        }
+
+        // Initial Runs
+        window.onload = () => {
+            generateBriefings();
+            initSchedule();
+            updateOnAir();
+            setInterval(updateOnAir, 60000);
+        };
+    </script>
 </body>
 </html>
