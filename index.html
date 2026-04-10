@@ -13,111 +13,100 @@
         .bg-lim { background-color: var(--lim-green); }
         .text-lim { color: var(--lim-green); }
         
-        /* Splash Screen Logic */
         #splash {
             position: fixed; inset: 0; background: var(--lim-green); z-index: 1000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: all 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+            transition: all 0.6s ease-in-out;
         }
 
-        /* Animated Photo Strip */
         .photo-strip {
             display: flex; gap: 15px; width: 400%;
-            animation: scroll 50s linear infinite;
+            animation: scroll 60s linear infinite;
         }
         @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        .photo-strip img { height: 320px; width: 480px; object-fit: cover; border: 6px solid #000; }
+        .photo-strip img { height: 280px; width: 420px; object-fit: cover; border: 4px solid #000; }
     </style>
 </head>
 <body>
 
-    <script>
-        const CONFIG = {
-            PATREON_URL: "https://www.patreon.com/YOUR_ACCOUNT", 
-            TOWN_SQUARE_URL: "https://diasporainmotion.com",
-            RADIO_STREAM: "https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3"
-        };
-    </script>
-
     <div id="splash">
         <div class="text-center text-white px-6">
             <h1 class="text-6xl md:text-8xl font-black italic mb-4 tracking-tighter uppercase">Lives <span class="text-black">In</span> Motion</h1>
-            <p class="serif text-xl mb-12 opacity-90 uppercase tracking-[0.4em]">The Hub is Live</p>
+            <p class="serif text-xl mb-12 opacity-90 uppercase tracking-[0.4em]">Broadcast Home</p>
             
-            <button onclick="enterSquare()" class="group relative bg-black text-white px-16 py-6 overflow-hidden shadow-2xl">
-                <span class="relative z-10 font-black uppercase tracking-[0.3em] group-hover:text-lim transition-colors">Enter Square & Listen</span>
-                <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            <button onclick="enterSquare()" class="bg-black text-white px-16 py-6 font-black uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all shadow-2xl">
+                Enter & Listen Live
             </button>
         </div>
     </div>
 
-    <nav class="bg-black text-white py-3 px-8 flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em]">
-        <div class="flex gap-6">
-            <a href="javascript:void(0)" onclick="window.open(CONFIG.TOWN_SQUARE_URL, '_blank')" class="hover:text-lim transition">
-                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Town Square Feed
-            </a>
+    <div class="bg-black text-white py-4 px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-red-600 rounded-full animate-ping"></span>
+            <span class="text-[10px] font-black uppercase tracking-widest">Live from the UK</span>
         </div>
-        <a href="javascript:void(0)" onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="text-lim hover:text-white transition">
-            Support on Patreon <i class="fa-brands fa-patreon ml-2"></i>
+        <a href="https://www.patreon.com/YOUR_ACCOUNT" target="_blank" class="bg-lim text-white px-10 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 transition shadow-lg flex items-center gap-3">
+            <i class="fa-brands fa-patreon text-lg"></i> Support our mission on Patreon
         </a>
-    </nav>
+        <a href="https://diasporainmotion.com" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b-2 border-white pb-1 hover:text-lim hover:border-lim transition">
+            Visit Town Square Feed <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+    </div>
 
     <header class="bg-white border-b-8 border-black px-8 py-10">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div>
-                <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
-                <p class="serif text-xl text-slate-500 mt-2 italic">UK Independent Broadcast Home.</p>
+            <div class="text-center md:text-left">
+                <h1 class="text-5xl md:text-6xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
+                <p class="serif text-xl text-slate-500 mt-2">UK Independent Broadcast Home.</p>
             </div>
             
-            <div class="flex flex-col md:items-end gap-4 w-full md:w-auto">
-                <div class="flex items-center bg-slate-100 rounded-full pl-6 pr-2 py-2 gap-4 shadow-inner border">
-                    <span class="text-[9px] font-black uppercase tracking-widest text-slate-400">On Air</span>
-                    <audio id="radio-player" src="https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3"></audio>
-                    <button onclick="toggleRadio()" id="play-btn" class="text-black text-3xl hover:text-lim transition">
-                        <i class="fa-solid fa-circle-pause"></i>
-                    </button>
+            <div class="bg-slate-100 p-4 rounded-xl border-2 border-black flex items-center gap-4 shadow-md">
+                <button onclick="toggleRadio()" id="play-btn" class="text-black text-4xl hover:text-lim transition">
+                    <i class="fa-solid fa-circle-pause"></i>
+                </button>
+                <div class="flex flex-col">
+                    <span class="text-[9px] font-black uppercase text-slate-400">Now Streaming</span>
+                    <span id="player-status" class="text-xs font-bold uppercase tracking-tighter text-lim">Radio Live</span>
                 </div>
+                <audio id="radio-player" src="https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3" preload="auto"></audio>
             </div>
         </div>
     </header>
 
-    <div class="bg-black py-4 border-b-4 border-black overflow-hidden">
+    <div class="bg-black py-4 overflow-hidden border-b-4 border-black">
         <div class="photo-strip">
-            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Culture">
-            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=800" alt="Textiles">
+            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Lagos">
+            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=800" alt="Aso Oke">
             <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800" alt="Music">
             <img src="https://images.unsplash.com/photo-1523413551509-5f21f0043199?w=800" alt="Market">
-            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Culture">
-            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=800" alt="Textiles">
+            <img src="https://images.unsplash.com/photo-1534260322277-996599bcc339?w=800" alt="Community">
+            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Lagos">
         </div>
     </div>
 
     <main class="max-w-6xl mx-auto py-16 px-6 grid lg:grid-cols-12 gap-16">
         <div class="lg:col-span-8">
-            <div class="flex justify-between items-end mb-10 border-b-2 border-black pb-4">
-                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">The Briefing Room</h2>
-                <span class="text-[10px] font-bold text-lim">Syncing Live...</span>
-            </div>
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-10 border-b-2 border-black pb-4">The Briefing Room</h2>
             <div id="briefing-container" class="space-y-16">
                 </div>
         </div>
 
         <aside class="lg:col-span-4">
-            <div class="sticky top-10 space-y-8">
-                <div class="bg-lim text-white p-8 rounded-br-[4rem] shadow-xl">
-                    <h3 class="font-black text-xs uppercase mb-6 tracking-[0.3em]">The Square Mission</h3>
-                    <p class="serif text-xl leading-relaxed italic mb-8">"Validating the experience of those living between two homes."</p>
-                    <button onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="w-full bg-white text-black py-4 font-black text-[10px] uppercase tracking-widest hover:bg-black hover:text-white transition">
-                        Join Our Patreon
-                    </button>
+            <div class="sticky top-10 space-y-10">
+                <div class="bg-lim text-white p-8 rounded-br-[4rem] shadow-xl border-t-4 border-black">
+                    <h3 class="font-black text-xs uppercase mb-6 tracking-widest">Our Mission</h3>
+                    <p class="serif text-xl leading-relaxed italic mb-8">"Validating the experience of those living between two homes through independent talk radio."</p>
+                    <a href="https://www.patreon.com/YOUR_ACCOUNT" target="_blank" class="block text-center bg-white text-black py-4 font-black text-[10px] uppercase tracking-widest hover:bg-black hover:text-white transition">
+                        Support the Mission
+                    </a>
                 </div>
 
                 <div class="bg-slate-50 p-8 border-l-8 border-black">
-                    <h4 class="text-[10px] font-black uppercase tracking-widest mb-6 border-b pb-2">Broadcast Times</h4>
-                    <div id="schedule-list" class="space-y-4 text-xs font-bold uppercase tracking-tighter">
+                    <h4 class="text-[10px] font-black uppercase tracking-widest mb-6 border-b pb-2">Broadcast Schedule</h4>
+                    <div id="schedule-list" class="space-y-4 text-xs font-bold uppercase">
                         </div>
                 </div>
             </div>
@@ -134,10 +123,10 @@
                 <button onclick="toggleChat()">×</button>
             </div>
             <div id="chat-messages" class="flex-1 p-4 h-64 overflow-y-auto text-xs space-y-4 bg-slate-50">
-                <p class="bg-white p-3 border rounded shadow-sm">Eku Abo! Welcome to the <b>Lives In Motion Square</b> assistant. How can I guide you?</p>
+                <p class="bg-white p-3 border rounded shadow-sm">Welcome back to the <b>Lives In Motion Square</b>. How can I help you navigate our station today?</p>
             </div>
             <div class="p-3 bg-white border-t-2 border-black flex gap-2">
-                <input type="text" id="chat-input" placeholder="Ask about the schedule..." class="flex-1 outline-none text-[10px] uppercase font-bold">
+                <input type="text" id="chat-input" placeholder="Ask about schedules..." class="flex-1 outline-none text-[10px] uppercase font-bold">
                 <button onclick="handleChat()" class="text-lim"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
@@ -148,8 +137,14 @@
         const playBtn = document.getElementById('play-btn');
 
         function enterSquare() {
-            // Force start audio and reveal site
-            audio.play().catch(e => console.log("Audio block bypass required click"));
+            // Unmute and Play on Enter
+            audio.play().then(() => {
+                document.getElementById('player-status').innerText = "On Air: Playing";
+            }).catch(e => {
+                console.log("Audio requires manual play after entry.");
+                document.getElementById('player-status').innerText = "Tap play to start";
+            });
+            
             document.getElementById('splash').style.transform = 'translateY(-100%)';
             setTimeout(() => document.getElementById('splash').style.display = 'none', 1000);
         }
@@ -158,9 +153,11 @@
             if (audio.paused) {
                 audio.play();
                 playBtn.innerHTML = '<i class="fa-solid fa-circle-pause"></i>';
+                document.getElementById('player-status').innerText = "On Air: Playing";
             } else {
                 audio.pause();
                 playBtn.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
+                document.getElementById('player-status').innerText = "Paused";
             }
         }
 
@@ -180,10 +177,10 @@
 
             setTimeout(() => {
                 const bMsg = document.createElement('p');
-                bMsg.className = "bg-white p-3 border border-slate-200 rounded mr-6 shadow-sm";
+                bMsg.className = "bg-white p-3 border rounded shadow-sm mr-6";
                 const q = input.value.toLowerCase();
-                if(q.includes('schedule')) bMsg.innerHTML = "Daily News: Hourly<br>Couchpieces: 7am/7pm<br>Truth Be Told: Sun 7pm";
-                else if(q.includes('square')) bMsg.innerText = "The Diaspora In Motion Square is our community feed. Click the link at the very top of the page to visit!";
+                if(q.includes('schedule')) bMsg.innerHTML = "<b>Broadcast Schedule:</b><br>• News: Hourly<br>• Couchpieces: 7am/7pm<br>• Truth Be Told: Sun 7pm";
+                else if(q.includes('patreon')) bMsg.innerText = "You can support us on Patreon via the link in our top black banner!";
                 else bMsg.innerText = "I'm the Square Concierge. You can find our editorial briefings and live stream right here.";
                 container.appendChild(bMsg);
                 container.scrollTop = container.scrollHeight;
@@ -198,10 +195,10 @@
                 document.getElementById('briefing-container').innerHTML = data.items.slice(0, 3).map(item => `
                     <article class="border-b-2 border-slate-100 pb-12">
                         <h3 class="serif text-3xl font-bold mb-6 hover:text-lim transition cursor-pointer leading-tight">${item.title}</h3>
-                        <p class="serif text-lg text-slate-500 mb-6 italic leading-relaxed">Providing a critical lens on developments affecting our global community...</p>
-                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase border-b-2 border-black pb-1 hover:text-lim hover:border-lim transition">View Full Perspective →</a>
+                        <p class="serif text-lg text-slate-500 mb-6 italic leading-relaxed">Independent Perspective: Exploring how this development impacts the Nigerian diaspora in the UK and beyond...</p>
+                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase border-b-2 border-black pb-1 hover:text-lim hover:border-lim transition">View Perspective →</a>
                     </article>`).join('');
-            } catch (e) { console.error("News fetch error"); }
+            } catch (e) { console.error("News sync failed."); }
         }
 
         window.onload = () => {
