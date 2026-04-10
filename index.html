@@ -19,21 +19,23 @@
 
     <script>
         const CONFIG = {
-            PATREON_URL: "https://www.patreon.com/YOUR_ACCOUNT",
-            AZURACAST_STREAM: "https://azuracast-nuremberg.myautodj.com/radio/8050/radio.mp3",
-            // The playback URL for your uploaded bulletin
+            PATREON_URL: "https://www.patreon.com/LivesInMotion",
+            AZURACAST_STREAM: "https://azuracast-nuremberg.myautodj.com/listen/station_8321_1775290855/radio.mp3",
+            // Note: The /play endpoint is used to stream the static file via API
             NEWS_BULLETIN_API: "https://azuracast-nuremberg.myautodj.com/api/station/51/file/bulletin.mp3/play", 
             FEATURED_INTERVIEW_API: "https://azuracast-nuremberg.myautodj.com/api/station/51/file/15417/play" 
         };
     </script>
 
-    <header class="bg-white border-b-8 border-black px-8 py-10">
+    <header class="bg-white border-b-8 border-black px-8 py-10 text-center md:text-left">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
                 <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
                 <p class="serif text-xl text-slate-500 mt-2">UK Independent Broadcast Home.</p>
             </div>
-            <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Town Square Feed</a>
+            <div class="flex gap-4">
+                <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Town Square Feed</a>
+            </div>
         </div>
     </header>
 
@@ -41,12 +43,12 @@
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6">
             <div class="flex items-center gap-3">
                 <span class="w-2 h-3 bg-red-600 rounded-full animate-pulse"></span>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em]">Live</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em]">Live Stream</span>
             </div>
             <audio id="main-audio-player" class="w-full h-8" controls></audio>
-            <div class="md:text-right flex-1 cursor-pointer" onclick="playAudio('bulletin')">
+            <div class="md:text-right flex-1 cursor-pointer group" onclick="playAudio('bulletin')">
                 <p id="on-air-now" class="text-xs font-bold text-lim uppercase tracking-widest">Connected</p>
-                <p class="text-[9px] text-slate-400 font-bold uppercase underline">Hear Latest 3m AI Bulletin</p>
+                <p class="text-[9px] text-slate-400 font-bold uppercase group-hover:text-white transition underline">Listen to latest 3m AI Bulletin</p>
             </div>
         </div>
     </nav>
@@ -54,19 +56,27 @@
     <main class="max-w-6xl mx-auto py-16 px-6 grid lg:grid-cols-12 gap-16">
         <div class="lg:col-span-7">
             <h2 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-10 border-b pb-4">Editorial Briefings</h2>
-            <div id="briefing-container"></div>
+            <div id="briefing-container">
+                </div>
 
-            <div class="mt-20 p-10 bg-slate-900 text-white rounded-br-[4rem]">
-                <h3 class="serif text-3xl font-bold mb-6 italic">Featured Narrative: Diaspora Diaries</h3>
-                <button onclick="playAudio('interview')" class="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-lim hover:text-white transition">Listen Now</button>
+            <div class="mt-20 p-10 bg-slate-900 text-white rounded-br-[4rem] shadow-xl">
+                <span class="text-[10px] font-bold text-lim uppercase tracking-widest">Narratives</span>
+                <h3 class="serif text-3xl font-bold mt-4 mb-6 italic">Featured Interview: Diaspora Diaries</h3>
+                <button onclick="playAudio('interview')" class="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-lim hover:text-white transition shadow-lg">
+                    <i class="fa-solid fa-play mr-2"></i> Launch Audio
+                </button>
             </div>
         </div>
 
         <aside class="lg:col-span-5">
             <div class="bg-slate-50 p-8 border-t-4 border-black sticky top-32">
                 <h3 class="text-xs font-black uppercase tracking-[0.3em] mb-8 italic">Broadcast Schedule</h3>
-                <div id="schedule-list" class="space-y-4 text-sm mb-8"></div>
-                <button onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="w-full bg-lim text-white py-4 font-black text-xs uppercase tracking-widest hover:scale-105 transition">Join Patreon</button>
+                <div id="schedule-list" class="space-y-4 text-sm mb-10">
+                    </div>
+                <div class="bg-black text-white p-6 rounded-lg text-center">
+                    <p class="text-[10px] font-bold uppercase mb-4 opacity-60 tracking-widest">Support Independent Radio</p>
+                    <button onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="w-full bg-lim py-4 font-black text-xs uppercase tracking-widest hover:scale-105 transition">Join our Patreon</button>
+                </div>
             </div>
         </aside>
     </main>
@@ -81,7 +91,7 @@
 
             if (type === 'bulletin') {
                 url = CONFIG.NEWS_BULLETIN_API + cacheBuster;
-                label = "PLAYING: NEWS BULLETIN";
+                label = "PLAYING: LATEST NEWS BULLETIN";
             } else if (type === 'interview') {
                 url = CONFIG.FEATURED_INTERVIEW_API;
                 label = "PLAYING: DIASPORA DIARIES";
@@ -94,25 +104,47 @@
             player.src = url;
             player.type = "audio/mpeg"; 
             player.load();
-            player.play().catch(() => { document.getElementById('on-air-now').innerText = "CLICK PLAY TO HEAR"; });
+            player.play().catch(() => { 
+                document.getElementById('on-air-now').innerText = "TAP PLAY TO HEAR"; 
+            });
             document.getElementById('on-air-now').innerText = label;
         }
 
         async function fetchNews() {
-            const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://rss.punchng.com/v1/category/latest_news')}`);
-            const data = await res.json();
-            document.getElementById('briefing-container').innerHTML = data.items.slice(0, 3).map(item => `
-                <article class="briefing-card">
-                    <h3 class="serif text-2xl font-bold mb-2">${item.title}</h3>
-                    <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b border-black">Read More</a>
-                </article>`).join('');
+            try {
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://rss.punchng.com/v1/category/latest_news')}`);
+                const data = await res.json();
+                document.getElementById('briefing-container').innerHTML = data.items.slice(0, 3).map(item => `
+                    <article class="briefing-card">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">${new Date().toLocaleDateString('en-GB')}</p>
+                        <h3 class="serif text-2xl font-bold mb-4">${item.title}</h3>
+                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-lim transition">Expand Briefing →</a>
+                    </article>`).join('');
+            } catch (e) {
+                console.log("RSS Feed currently offline.");
+            }
+        }
+
+        function initSchedule() {
+            const list = [
+                { name: "LIM Daily News", time: "Hourly", days: "Mon-Sun" },
+                { name: "Couchpieces", time: "07:00 & 19:00", days: "Mon-Sun" },
+                { name: "Diaspora Diaries", time: "11:00", days: "Sat/Wed" },
+                { name: "Walk in God's Light", time: "15:00", days: "Sun/Thu" },
+                { name: "Truth Be Told", time: "19:00", days: "Sun/Tue" }
+            ];
+            document.getElementById('schedule-list').innerHTML = list.map(s => `
+                <div class="flex justify-between border-b border-slate-200 pb-3">
+                    <p class="font-black uppercase text-[10px]">${s.name}</p>
+                    <p class="font-bold text-[10px]">${s.time}</p>
+                </div>`).join('');
         }
 
         window.onload = () => {
             player.src = CONFIG.AZURACAST_STREAM;
             fetchNews();
-            // Simple Schedule
-            document.getElementById('schedule-list').innerHTML = `<p class="font-bold border-b pb-2 text-[11px]">LIM DAILY NEWS - HOURLY</p><p class="font-bold border-b pb-2 text-[11px]">DIASPORA DIARIES - WED/SAT</p>`;
+            initSchedule();
+            document.getElementById('on-air-now').innerText = "ON AIR: LIVE STREAM";
         };
     </script>
 </body>
