@@ -1,11 +1,271 @@
-<section id="story-vault" class="bg-zinc-950 py-24 px-6 border-y border-white/5">
-    <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-4xl font-black uppercase italic mb-6">Send Your <span class="text-lim">Voice to the Square</span></h2>
-        <p class="serif text-zinc-400 mb-12">We want to hear your diaspora journey. Tap the button below to send us a Voice Note directly on WhatsApp. Your story could be featured on our next broadcast.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lives In Motion | The Diaspora Square</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --lim-green: #1C5E37; --lim-gold: #D4AF37; }
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .serif { font-family: 'Georgia', serif; }
+        .bg-lim { background-color: var(--lim-green); }
+        .text-lim { color: var(--lim-green); }
         
-        <a href="https://wa.me/447XXXXXXXXX?text=I%20have%20a%20story%20for%20Lives%20In%20Motion" class="inline-flex items-center gap-4 bg-[#25D366] text-black px-12 py-5 font-black uppercase tracking-widest hover:scale-105 transition shadow-2xl rounded-full">
-            <i class="fa-brands fa-whatsapp text-2xl"></i> Send Voice Note
-        </a>
-        <p class="mt-6 text-[10px] text-zinc-600 uppercase tracking-widest">By sending a message, you agree to our Editorial & Broadcast Terms.</p>
+        /* Entrance Curtain */
+        #entrance {
+            position: fixed; inset: 0; background: linear-gradient(to bottom, #1C5E37, #000);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        /* Scrolling Gallery */
+        .gallery-track {
+            display: flex; gap: 20px; width: 400%;
+            animation: scroll 60s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .gallery-track img { height: 300px; width: 450px; object-fit: cover; border: 4px solid #111; border-radius: 8px; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--lim-green); border-radius: 10px; }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; overflow-y: auto; padding: 40px 20px; }
+        .modal.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div id="entrance">
+        <div class="text-center px-6">
+            <h1 class="text-7xl md:text-9xl font-black italic mb-2 tracking-tighter uppercase">Lives <span class="text-black">In</span> Motion</h1>
+            <p class="serif text-xl md:text-2xl mb-12 opacity-80 uppercase tracking-[0.4em]">UK Independent Radio</p>
+            <button onclick="activateSquare()" class="group relative bg-white text-black px-16 py-6 font-black uppercase tracking-widest overflow-hidden transition-all shadow-2xl">
+                <span class="relative z-10 group-hover:text-white transition-colors">Enter The Square & Listen</span>
+                <div class="absolute inset-0 bg-lim translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            </button>
+        </div>
     </div>
-</section>
+
+    <nav class="bg-zinc-950 text-white py-3 px-8 flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] border-b border-white/5">
+        <div class="flex gap-8">
+            <a href="https://diasporainmotion.com" target="_blank" class="hover:text-lim transition italic underline decoration-lim">Town Square Feed</a>
+        </div>
+        <div class="flex gap-8">
+            <a href="https://www.patreon.com/YOUR_ACCOUNT" target="_blank" class="text-lim hover:text-white transition italic">Support on Patreon</a>
+        </div>
+    </nav>
+
+    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-8">
+                <h2 class="text-3xl font-black italic uppercase tracking-tighter">LIM <span class="text-lim">HUB</span></h2>
+                
+                <div class="flex items-center bg-zinc-900 px-6 py-3 rounded-full border border-zinc-800 gap-4 shadow-inner">
+                    <button onclick="toggleAudio()" id="play-btn" class="text-lim text-3xl hover:scale-110 transition">
+                        <i class="fa-solid fa-circle-play"></i>
+                    </button>
+                    <div>
+                        <p class="text-[8px] font-black uppercase text-zinc-500 tracking-widest">Live Signal</p>
+                        <p id="stream-status" class="text-[10px] font-bold uppercase text-red-600 animate-pulse">Off Air</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-8 text-[11px] font-black uppercase tracking-widest">
+                <a href="#shows" class="hover:text-lim transition">Schedule</a>
+                <a href="#story-vault" class="hover:text-lim transition">Share Story</a>
+                <button onclick="toggleModal('compliance-modal')" class="hover:text-lim transition">Compliance</button>
+            </div>
+        </div>
+        <audio id="radio-stream" crossorigin="anonymous">
+            <source src="https://azuracast-nuremberg.myautodj.com/listen/radio/radio.mp3" type="audio/mpeg">
+        </audio>
+    </header>
+
+    <section class="bg-black py-4 overflow-hidden border-b border-white/10">
+        <div class="gallery-track">
+            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Culture">
+            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=800" alt="Society">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800" alt="Vibe">
+            <img src="https://images.unsplash.com/photo-1523413551509-5f21f0043199?w=800" alt="Market">
+            <img src="https://images.unsplash.com/photo-1534260322277-996599bcc339?w=800" alt="Lagos">
+            <img src="https://images.unsplash.com/photo-1590753027201-92b49673906a?w=800" alt="Culture">
+            <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?w=800" alt="Society">
+        </div>
+    </section>
+
+    <main class="relative py-32 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="text-lim font-black uppercase tracking-[0.4em] text-xs mb-6 inline-block">Validating the Diaspora</span>
+            <h2 class="serif text-5xl md:text-7xl font-bold mb-10 leading-tight">Identity, Culture, and the Rhythms of Two Homes.</h2>
+            <p class="serif text-xl md:text-2xl text-zinc-400 italic leading-relaxed mb-12">
+                Broadcast house for the UK Nigerian experience. Correcting misconceptions through independent talk radio and community storytelling.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="https://www.patreon.com/YOUR_ACCOUNT" class="bg-white text-black px-12 py-5 font-black uppercase tracking-widest text-xs hover:bg-lim hover:text-white transition">Become a Member</a>
+                <a href="#story-vault" class="border-2 border-white text-white px-12 py-5 font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition">Share Your Narrative</a>
+            </div>
+        </div>
+    </main>
+
+    <section id="shows" class="py-24 px-8 bg-zinc-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h3 class="text-4xl font-black uppercase italic tracking-tighter">The <span class="text-lim">Broadcast</span> Schedule</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="group border-l border-zinc-800 pl-8 py-4 hover:border-lim transition-colors">
+                    <p class="text-lim font-black text-[10px] uppercase mb-4">Daily • 07:00 / 19:00</p>
+                    <h4 class="text-3xl font-black uppercase italic mb-4 group-hover:translate-x-2 transition-transform">Couchpieces</h4>
+                    <p class="serif text-zinc-400 text-sm leading-relaxed mb-8">Deep-dive social analysis and cultural commentary from the comfort of our hub. Validating the everyday journey.</p>
+                    <button onclick="toggleModal('show-detail')" class="text-[10px] font-black uppercase border-b-2 border-white pb-1">View Archives</button>
+                </div>
+                <div class="group border-l border-zinc-800 pl-8 py-4 hover:border-lim transition-colors">
+                    <p class="text-lim font-black text-[10px] uppercase mb-4">Sunday • 19:00</p>
+                    <h4 class="text-3xl font-black uppercase italic mb-4 group-hover:translate-x-2 transition-transform">Truth Be Told</h4>
+                    <p class="serif text-zinc-400 text-sm leading-relaxed mb-8">Flagship talk radio. Correcting misconceptions and having the difficult conversations others avoid.</p>
+                    <button class="text-[10px] font-black uppercase border-b-2 border-white pb-1">Listen Back</button>
+                </div>
+                <div class="group border-l border-zinc-800 pl-8 py-4 hover:border-lim transition-colors">
+                    <p class="text-lim font-black text-[10px] uppercase mb-4">Hourly • 24/7</p>
+                    <h4 class="text-3xl font-black uppercase italic mb-4 group-hover:translate-x-2 transition-transform">Diaspora News</h4>
+                    <p class="serif text-zinc-400 text-sm leading-relaxed mb-8">The heartbeat of the Square. 3-minute bulletins connecting UK headlines to the Nigerian home front.</p>
+                    <button class="text-[10px] font-black uppercase border-b-2 border-white pb-1">Latest Bulletin</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="story-vault" class="py-32 px-8 bg-lim text-white text-center">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-5xl md:text-6xl font-black uppercase italic mb-8 tracking-tighter">Your Story Is <br><span class="text-black underline decoration-white">Our Station</span></h2>
+            <p class="serif text-xl italic mb-12 opacity-90 leading-relaxed">Recorded a thought? Have a diaspora experience to share? Tap below to send a Voice Note directly to our studio via WhatsApp. Vetted submissions are featured on-air.</p>
+            <a href="https://wa.me/447XXXXXXXXX?text=Hello%20LIM%20Studio!%20I%20have%20a%20story%20to%20share." class="inline-flex items-center gap-6 bg-black text-white px-16 py-6 font-black uppercase tracking-widest hover:scale-105 transition shadow-2xl rounded-full">
+                <i class="fa-brands fa-whatsapp text-3xl"></i> WhatsApp The Studio
+            </a>
+        </div>
+    </section>
+
+    <footer class="py-20 px-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
+            <div class="col-span-2">
+                <h4 class="text-3xl font-black italic uppercase mb-6">Lives <span class="text-lim">In</span> Motion</h4>
+                <p class="serif text-zinc-500 max-w-sm">Broadcast House, United Kingdom. Independent radio dedicated to the validation and correction of the diaspora experience.</p>
+            </div>
+            <div>
+                <h5 class="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-6">Navigation</h5>
+                <ul class="space-y-4 text-xs font-bold uppercase tracking-widest">
+                    <li><a href="https://diasporainmotion.com" class="hover:text-lim transition">Town Square</a></li>
+                    <li><a href="https://www.patreon.com/YOUR_ACCOUNT" class="hover:text-lim transition">Patreon</a></li>
+                    <li><a href="#shows" class="hover:text-lim transition">Schedule</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-6">Legal</h5>
+                <ul class="space-y-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                    <li><button onclick="toggleModal('compliance-modal')" class="hover:text-white transition">Editorial Standards</button></li>
+                    <li><button onclick="toggleModal('compliance-modal')" class="hover:text-white transition">Privacy & GDPR</button></li>
+                    <li><button onclick="toggleModal('compliance-modal')" class="hover:text-white transition">Equality Statement</button></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <div id="compliance-modal" class="modal">
+        <div class="max-w-4xl mx-auto bg-zinc-900 p-12 rounded-2xl border border-zinc-800">
+            <div class="flex justify-between items-center mb-12 border-b border-zinc-700 pb-6">
+                <h3 class="text-2xl font-black uppercase italic">Regulatory <span class="text-lim">Compliance</span></h3>
+                <button onclick="toggleModal('compliance-modal')" class="text-zinc-500 hover:text-white">CLOSE ×</button>
+            </div>
+            <div class="space-y-12 serif text-zinc-300">
+                <div>
+                    <h4 class="text-white font-bold uppercase text-sm mb-4">Ofcom Editorial Alignment</h4>
+                    <p>Lives In Motion operates in adherence to the Ofcom Broadcasting Code. Our mission is built on accuracy, impartiality, and the prevention of harm. All community-submitted content is vetted by our editorial team before broadcast.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase text-sm mb-4">Privacy & Data (GDPR)</h4>
+                    <p>Submissions via WhatsApp or Email grant Lives In Motion a non-exclusive license for broadcast use. Your personal contact data is never shared with third parties and is used solely for studio communication.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold uppercase text-sm mb-4">Equality & Diversity</h4>
+                    <p>We are a platform for all voices within the Nigerian Diaspora. We maintain a zero-tolerance policy for hate speech, discrimination, or content that incites community tension.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="show-detail" class="modal">
+        <div class="max-w-5xl mx-auto bg-white text-black p-12 rounded-2xl">
+            <div class="flex justify-between items-start mb-12">
+                <div>
+                    <p class="text-[10px] font-black uppercase text-lim tracking-[0.3em] mb-4">Series Archive</p>
+                    <h3 class="text-5xl font-black uppercase italic">Couchpieces</h3>
+                </div>
+                <button onclick="toggleModal('show-detail')" class="font-black">CLOSE ×</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="bg-zinc-100 p-8 rounded-xl border-2 border-black">
+                    <p class="text-[10px] font-black uppercase mb-2">Latest Recording</p>
+                    <h5 class="serif font-bold text-xl mb-6 italic">"The Architecture of Home"</h5>
+                    <audio controls class="w-full">
+                        <source src="your-audio-link.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="serif space-y-6">
+                    <p class="text-lg italic leading-relaxed">Couchpieces is our daily analytical series. We look at the small moments that define the diaspora experience.</p>
+                    <a href="https://www.patreon.com/YOUR_ACCOUNT" class="block text-center bg-lim text-white py-4 font-black uppercase tracking-widest text-xs">Join Patreon for Extended Archives</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('radio-stream');
+        const playBtn = document.getElementById('play-btn');
+        const status = document.getElementById('stream-status');
+
+        function activateSquare() {
+            // Trigger radio and reveal site
+            audio.play().then(() => {
+                status.innerText = "LIVE: ON AIR";
+                status.classList.remove('text-red-600');
+                status.classList.add('text-lim');
+                playBtn.innerHTML = '<i class="fa-solid fa-circle-pause"></i>';
+            }).catch(e => {
+                status.innerText = "BUFFERING - TAP PLAY";
+            });
+            
+            document.getElementById('entrance').style.transform = 'translateY(-100%)';
+            setTimeout(() => { document.getElementById('entrance').style.display = 'none'; }, 800);
+        }
+
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerHTML = '<i class="fa-solid fa-circle-pause"></i>';
+                status.innerText = "LIVE: ON AIR";
+                status.classList.remove('text-red-600');
+                status.classList.add('text-lim');
+            } else {
+                audio.pause();
+                playBtn.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
+                status.innerText = "SIGNAL PAUSED";
+                status.classList.add('text-red-600');
+                status.classList.remove('text-lim');
+            }
+        }
+
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
