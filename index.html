@@ -20,11 +20,12 @@
 <body>
 
     <script>
-        // REPLACE THESE WITH YOUR ACTUAL LINKS
+        // REPLACE THESE WITH YOUR ACTUAL LINKS FROM AZURACAST
         const CONFIG = {
             PATREON_URL: "https://www.patreon.com/LivesInMotion",
             AZURACAST_STREAM: "https://azuracast-nuremberg.myautodj.com/listen/station_8321_1775290855/radio.mp3",
-            NEWS_BULLETIN_MP3: "https://azuracast-nuremberg.myautodj.com/api/station/51/file/17163/play", // The auto-bulletin
+            // This must match the file path your GitHub Action uploads to
+            NEWS_BULLETIN_MP3: "https://azuracast-nuremberg.myautodj.com/api/station/51/file/17163/play", 
             FEATURED_INTERVIEW_MP3: "https://azuracast-nuremberg.myautodj.com/api/station/51/file/15417/play" 
         };
     </script>
@@ -35,20 +36,22 @@
                 <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">Lives <span class="text-lim">In</span> Motion</h1>
                 <p class="serif text-xl text-slate-500 mt-2">UK Independent Broadcast Home.</p>
             </div>
-            <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Switch to Town Square</a>
+            <a href="https://diasporainmotion.com" class="text-[10px] font-black uppercase tracking-widest border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition">Town Square Feed</a>
         </div>
     </header>
 
     <nav class="sticky top-0 z-50 bg-black text-white px-8 py-4 shadow-2xl">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-6">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 min-w-max">
                 <span class="w-2 h-2 bg-red-600 rounded-full animate-ping"></span>
                 <span class="text-[10px] font-black uppercase tracking-[0.2em]">Live Stream</span>
             </div>
-            <audio id="main-audio-player" class="w-full h-8" controls></audio>
-            <div class="md:text-right flex-1 cursor-pointer" onclick="playBulletin()">
-                <p id="on-air-now" class="text-xs font-bold text-lim uppercase tracking-widest">Checking Schedule...</p>
-                <p class="text-[9px] text-slate-400 font-bold uppercase underline">Click to Hear Latest 3m Bulletin</p>
+            
+            <audio id="main-audio-player" class="w-full h-8" controls preload="none"></audio>
+            
+            <div class="md:text-right flex-1 cursor-pointer group" onclick="playAudioSource('bulletin')">
+                <p id="on-air-now" class="text-xs font-bold text-lim uppercase tracking-widest transition-colors">Checking Live Status...</p>
+                <p class="text-[9px] text-slate-400 font-bold uppercase group-hover:text-white transition">Listen to latest 3m AI Bulletin <i class="fa-solid fa-play ml-1"></i></p>
             </div>
         </div>
     </nav>
@@ -65,12 +68,12 @@
                 <div class="h-32 shimmer rounded-xl mb-4"></div>
             </div>
 
-            <div class="mt-20 p-10 bg-slate-900 text-white rounded-br-[4rem]">
-                <span class="text-[10px] font-bold text-lim uppercase tracking-widest">On-Demand Stories</span>
-                <h3 class="serif text-4xl font-bold mt-4 mb-6">Featured Interview: Diaspora Diaries</h3>
+            <div class="mt-20 p-10 bg-slate-900 text-white rounded-br-[4rem] shadow-xl">
+                <span class="text-[10px] font-bold text-lim uppercase tracking-widest">Featured Narrative</span>
+                <h3 class="serif text-4xl font-bold mt-4 mb-6">Diaspora Diaries: Episode 01</h3>
                 <p class="serif text-lg text-slate-400 mb-8 italic">"Validating the experience of those living between two homes."</p>
-                <button onclick="playInterview()" class="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-lim hover:text-white transition">
-                    <i class="fa-solid fa-play mr-2"></i> Listen Now
+                <button onclick="playAudioSource('interview')" class="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:bg-lim hover:text-white transition">
+                    <i class="fa-solid fa-play mr-2"></i> Play Interview
                 </button>
             </div>
         </div>
@@ -80,10 +83,10 @@
                 <h3 class="text-xs font-black uppercase tracking-[0.3em] mb-8 italic">Broadcast Schedule</h3>
                 <div id="schedule-list" class="space-y-4 text-sm mb-10"></div>
                 
-                <div class="bg-black text-white p-8 text-center">
-                    <h4 class="font-black text-sm uppercase mb-4">Support the Station</h4>
-                    <p class="serif text-xs opacity-70 mb-6">Help us keep diaspora radio independent and high-quality.</p>
-                    <button onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="w-full bg-lim py-4 font-black text-xs uppercase tracking-widest hover:scale-105 transition">Join our Patreon</button>
+                <div class="bg-black text-white p-8 text-center rounded-lg">
+                    <h4 class="font-black text-sm uppercase mb-4">Support Independent Radio</h4>
+                    <p class="serif text-xs opacity-70 mb-6 leading-relaxed">Join our Patreon to help us correct misconceptions and build community.</p>
+                    <button onclick="window.open(CONFIG.PATREON_URL, '_blank')" class="w-full bg-lim py-4 font-black text-xs uppercase tracking-widest hover:scale-105 transition shadow-lg">Join Patreon</button>
                 </div>
             </div>
         </aside>
@@ -91,22 +94,42 @@
 
     <script>
         const player = document.getElementById('main-audio-player');
-        player.src = CONFIG.AZURACAST_STREAM;
+        
+        // --- 1. THE ROBUST AUDIO SWITCHER ---
+        function playAudioSource(sourceType) {
+            let targetUrl = "";
+            let label = "";
+            
+            // Bypass browser cache for the hourly news bulletin
+            const cacheBuster = "?t=" + new Date().getTime();
 
-        // Function to switch to News Bulletin
-        function playBulletin() {
-            player.src = CONFIG.NEWS_BULLETIN_MP3;
-            player.play();
-            document.getElementById('on-air-now').innerText = "PLAYING: LATEST NEWS BULLETIN";
+            if (sourceType === 'bulletin') {
+                targetUrl = CONFIG.NEWS_BULLETIN_MP3 + cacheBuster;
+                label = "PLAYING: HOURLY NEWS BULLETIN";
+            } else if (sourceType === 'interview') {
+                targetUrl = CONFIG.FEATURED_INTERVIEW_MP3;
+                label = "PLAYING: DIASPORA DIARIES";
+            } else {
+                targetUrl = CONFIG.AZURACAST_STREAM;
+                label = "ON AIR: LIVE STREAM";
+            }
+
+            // Implementation of the switch
+            player.pause();
+            player.src = targetUrl;
+            player.load(); // CRITICAL: Forces browser to reset source
+            
+            const playPromise = player.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Playback prevented. User must click play.");
+                });
+            }
+            
+            document.getElementById('on-air-now').innerText = label;
         }
 
-        // Function to switch to Interview
-        function playInterview() {
-            player.src = CONFIG.FEATURED_INTERVIEW_MP3;
-            player.play();
-            document.getElementById('on-air-now').innerText = "PLAYING: DIASPORA DIARIES";
-        }
-
+        // --- 2. THE NEWS SCAPER ---
         async function generateBriefings() {
             const container = document.getElementById('briefing-container');
             try {
@@ -120,8 +143,8 @@
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${new Date().toLocaleDateString('en-GB')}</span>
                         </div>
                         <h3 class="serif text-3xl font-bold leading-tight mb-4">${item.title}</h3>
-                        <p class="serif text-lg text-slate-600 leading-relaxed mb-6 italic">Summary: Analysis of the current diaspora impact regarding this development...</p>
-                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-lim hover:border-lim transition">Read Full Article →</a>
+                        <p class="serif text-lg text-slate-600 leading-relaxed mb-6 italic">A curated briefing for the UK Nigerian Diaspora. This development signals key cultural shifts we are monitoring...</p>
+                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase tracking-widest border-b-2 border-black pb-1 hover:text-lim transition">Read Full Article →</a>
                     </article>
                 `).join('');
                 document.getElementById('update-status').innerText = "Live Update Active";
@@ -130,6 +153,7 @@
             }
         }
 
+        // --- 3. THE SCHEDULE ENGINE ---
         function initSchedule() {
             const SCHEDULE = [
                 { name: "LIM Daily News", time: "Hourly", days: "Mon-Sun" },
@@ -146,11 +170,28 @@
             `).join('');
         }
 
+        function updateOnAirUI() {
+            const now = new Date();
+            const mins = now.getMinutes();
+            const onAir = document.getElementById('on-air-now');
+
+            // Automatically highlight News for the first 3 mins of every hour
+            if (mins >= 0 && mins <= 3) {
+                onAir.innerText = "ON AIR: HOURLY NEWS BULLETIN";
+                onAir.style.color = "#dc2626"; // Red
+            } else {
+                onAir.innerText = "ON AIR: LIVE STREAM";
+                onAir.style.color = "#4ade80"; // Green
+            }
+        }
+
+        // --- INITIALIZE ---
         window.onload = () => {
+            player.src = CONFIG.AZURACAST_STREAM;
             generateBriefings();
             initSchedule();
-            // Default "On Air" label
-            document.getElementById('on-air-now').innerText = "ON AIR: LIVE STREAM";
+            updateOnAirUI();
+            setInterval(updateOnAirUI, 30000);
         };
     </script>
 </body>
