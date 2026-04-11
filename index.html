@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --lim-green: #1C5E37; --lim-blue: #0EA5E9; }
-        body { background: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; }
+        body { background: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .serif { font-family: 'Georgia', serif; }
         
         .hero-banner {
@@ -31,19 +31,27 @@
         .bg-ai { background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800') center/cover; }
         .bg-music { background: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=800') center/cover; }
 
-        /* Ticker Style */
-        .ticker-wrap { background: #f8fafc; overflow: hidden; white-space: nowrap; padding: 12px 0; border-y: 1px solid #e2e8f0; }
-        .ticker-move { display: inline-block; animation: ticker-kf 60s linear infinite; font-weight: 800; font-size: 12px; color: var(--lim-green); text-transform: uppercase; }
-        @keyframes ticker-kf { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        .headline-link { display: block; padding: 12px; border-left: 4px solid var(--lim-blue); background: #fafafa; margin-bottom: 8px; border-radius: 0 8px 8px 0; transition: 0.2s; }
-        .headline-link:hover { background: #f0f9ff; transform: translateX(5px); }
+        /* Horizontal News Slider */
+        .news-slider {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            gap: 20px; padding: 20px 0; scrollbar-width: none;
+        }
+        .news-slider::-webkit-scrollbar { display: none; }
         
+        .news-slide {
+            flex: 0 0 300px; scroll-snap-align: start;
+            background: #fafafa; border-top: 4px solid var(--lim-blue);
+            padding: 20px; border-radius: 12px; height: 200px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s;
+        }
+        .news-slide:hover { transform: translateY(-5px); background: #fff; border-color: var(--lim-green); }
+
         #legal-modal { background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; z-index: 9999; }
         .foot-tile { background: white; border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
-<body onload="fetchNews()">
+<body onload="fetchBroadBriefing()">
 
     <header class="hero-banner pt-10 pb-24 px-6 text-white text-center">
         <nav class="max-w-7xl mx-auto flex justify-between items-center mb-16">
@@ -68,14 +76,14 @@
     <section id="projects" class="max-w-7xl mx-auto px-6 -mt-16 grid md:grid-cols-3 gap-8">
         <div class="project-card bg-station">
             <div class="relative z-10">
-                <span class="bg-sky-500 text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase">Live Radio</span>
+                <span class="bg-sky-500 text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase tracking-widest">Live Radio</span>
                 <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/embed?allow_popup=1&continuous=1" frameborder="0" style="width: 100%; height: 120px; border-radius: 12px;"></iframe>
             </div>
         </div>
 
         <div class="project-card bg-ai">
             <div class="relative z-10">
-                <span class="bg-emerald-600 text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase">Wellness AI</span>
+                <span class="bg-emerald-600 text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase tracking-widest">Wellness AI</span>
                 <h3 class="text-2xl font-black italic uppercase mb-2">Health Concierge</h3>
                 <a href="https://healthcare.easylinkcloud.online/easy-link-assistant/" target="_blank" class="bg-white text-black py-3 rounded-full font-black text-[10px] uppercase block text-center mt-4 shadow-lg">Launch Assistant</a>
             </div>
@@ -83,26 +91,28 @@
 
         <div class="project-card bg-music">
             <div class="relative z-10">
-                <span class="bg-lim-green text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase">Global Outreach</span>
+                <span class="bg-lim-green text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase tracking-widest">Outreach</span>
                 <h3 class="text-2xl font-black italic uppercase mb-2">Media & Worship</h3>
                 <button class="bg-white/20 text-white border border-white/40 py-2 rounded-full font-black text-[10px] uppercase w-full backdrop-blur-sm">Opening Soon</button>
             </div>
         </div>
     </section>
 
-    <div class="ticker-wrap mt-20">
-        <div id="ticker-content" class="ticker-move">
-            UPDATING GLOBAL BRIEFING... NIGERIA • UK • DIASPORA • FAITH • TECHNOLOGY • BUSINESS • CULTURE • 
+    <section id="news" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="flex items-end justify-between mb-4">
+            <div>
+                <h3 class="text-3xl font-black italic uppercase tracking-tighter">Global <span class="text-sky-500">Briefing</span></h3>
+                <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em]">International • Christian • Technology • Politics</p>
+            </div>
+            <div class="hidden md:flex gap-2 text-zinc-300">
+                <i class="fa-solid fa-arrow-left-long"></i>
+                <span class="text-[9px] font-bold uppercase">Swipe to Explore</span>
+                <i class="fa-solid fa-arrow-right-long"></i>
+            </div>
         </div>
-    </div>
-
-    <section id="news" class="py-20 px-6 max-w-4xl mx-auto">
-        <div class="flex items-center justify-between mb-8">
-            <h3 class="text-2xl font-black italic uppercase tracking-tighter">Global <span class="text-sky-500">Briefing</span></h3>
-            <span class="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Live Stream</span>
-        </div>
-        <div id="news-list" class="space-y-4">
-            <div class="p-10 text-center text-zinc-300 italic serif">Establishing Link...</div>
+        
+        <div id="news-slider" class="news-slider">
+            <div class="p-10 text-center text-zinc-300 italic w-full">Connecting to global news streams...</div>
         </div>
     </section>
 
@@ -117,19 +127,19 @@
                 <div class="grid grid-cols-2 gap-4">
                     <a href="https://wa.me/2349031167282" target="_blank" class="foot-tile">
                         <i class="fa-brands fa-whatsapp text-emerald-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase tracking-tighter">WhatsApp Studio</span>
+                        <span class="text-[10px] font-black uppercase">WhatsApp Studio</span>
                     </a>
                     <a href="https://www.instagram.com/livesinmotion26" target="_blank" class="foot-tile">
                         <i class="fa-brands fa-instagram text-pink-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase tracking-tighter">Instagram</span>
+                        <span class="text-[10px] font-black uppercase">Instagram</span>
                     </a>
                     <div onclick="toggleLegal(true)" class="foot-tile">
                         <i class="fa-solid fa-scale-balanced text-sky-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase tracking-tighter">Privacy & Legal</span>
+                        <span class="text-[10px] font-black uppercase">Privacy & Legal</span>
                     </div>
                     <a href="https://livesinmotion26.myshopify.com" target="_blank" class="foot-tile">
                         <i class="fa-solid fa-cart-shopping text-amber-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase tracking-tighter">Official Shop</span>
+                        <span class="text-[10px] font-black uppercase">Official Shop</span>
                     </a>
                 </div>
             </div>
@@ -151,34 +161,45 @@
     </div>
 
     <script>
-        // FORCED NEWS ENGINE (USING GOOGLE RSS PROXY)
-        async function fetchNews() {
-            const list = document.getElementById('news-list');
-            const ticker = document.getElementById('ticker-content');
-            
-            // Using a high-availability public proxy that browsers rarely block
+        async function fetchBroadBriefing() {
+            const slider = document.getElementById('news-slider');
             const api = 'https://api.rss2json.com/v1/api.json?rss_url=';
-            const feed = encodeURIComponent('https://news.google.com/rss/search?q=Nigeria+Christian+Technology+Politics&hl=en-NG&gl=NG&ceid=NG:en');
+            
+            // Mix of Global News and Christian News Sources
+            const queries = [
+                'https://news.google.com/rss/search?q=Global+Breaking+News+Politics+Technology&hl=en-GB&gl=GB&ceid=GB:en',
+                'https://news.google.com/rss/search?q=Global+Christian+News+Mission+Faith&hl=en-GB&gl=GB&ceid=GB:en'
+            ];
 
             try {
-                const response = await fetch(api + feed);
-                const data = await response.json();
+                // Fetch both feeds simultaneously
+                const responses = await Promise.all(queries.map(q => fetch(api + encodeURIComponent(q))));
+                const results = await Promise.all(responses.map(r => r.json()));
                 
-                if (data.status === 'ok') {
-                    // Update Ticker
-                    const titles = data.items.map(i => i.title).join(' • ');
-                    ticker.innerText = titles + ' • ' + titles;
-                    
-                    // Update List
-                    list.innerHTML = data.items.slice(0, 10).map(item => `
-                        <a href="${item.link}" target="_blank" class="headline-link">
-                            <h4 class="font-bold text-sm leading-snug">${item.title}</h4>
-                            <p class="text-[9px] font-black text-zinc-400 uppercase mt-1">${item.pubDate.split(' ')[0]} • Source Link</p>
-                        </a>
-                    `).join('');
-                }
+                // Merge and Shuffle news
+                let allItems = [...results[0].items, ...results[1].items];
+                allItems.sort(() => Math.random() - 0.5);
+
+                slider.innerHTML = allItems.slice(0, 15).map(item => {
+                    const isChristian = item.title.toLowerCase().includes('church') || item.title.toLowerCase().includes('faith') || item.title.toLowerCase().includes('christian');
+                    const label = isChristian ? 'GLOBAL FAITH' : 'WORLD UPDATE';
+                    const color = isChristian ? 'text-emerald-600' : 'text-sky-500';
+
+                    return `
+                        <div class="news-slide">
+                            <div>
+                                <span class="text-[9px] font-black ${color} tracking-widest uppercase mb-2 block">${label}</span>
+                                <h4 class="font-bold text-sm leading-tight text-zinc-800 line-clamp-4">${item.title}</h4>
+                            </div>
+                            <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase text-zinc-400 hover:text-black transition">
+                                Read Full Report →
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+
             } catch (error) {
-                list.innerHTML = '<div class="text-center py-10 text-zinc-400 italic">Connecting to secure stream... Please refresh.</div>';
+                slider.innerHTML = '<div class="p-10 text-center text-zinc-400 italic">Syncing global data streams... Please wait.</div>';
             }
         }
 
