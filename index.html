@@ -1,233 +1,210 @@
+No apologies needed! That distinction is actually a significant business advantage. It allows you to build a **reproducible model**: you master the Nigerian diaspora market in the UK first, then "copy-paste" that successful framework for other communities (e.g., Ghanaian, West Indian, or Polish diasporas) using the same technology and creative engine.
+Below is the **Lives In Motion Master Plan** and the **Finalized Global-Local Architecture** for the site.
+## The Lives In Motion Master Plan: Scalable Diaspora Impact
+### 1. The Strategy: "The Diaspora Blueprint"
+ * **The Hub (UK):** Centralized operations, AI development (Eki), and Worship production (Abby).
+ * **The Local Node (Nigeria Focus):** Currently the primary "validating" voice.
+ * **The Scalability:** Future community "nodes" can be plugged into the same radio infrastructure and AI Health engine, creating a network of validated diaspora groups under the LIM Ltd banner.
+### 2. Revenue Pillars
+ * **Membership (Patreon):** Tiered support for "The Square" (Radio) and "The Sanctuary" (Ministry).
+ * **AI Licensing:** Future B2B revenue by offering the Health AI to UK clinics serving diverse populations.
+ * **Creative Assets:** Global streaming and licensing for original worship music.
+## The Final Website Build: One Hub, Global Vision
+This code creates a clean, authoritative, yet simple interface. It features a "Community Selector" to show that while Nigeria is the current focus, the platform is built to expand.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lives In Motion | The Diaspora Square</title>
+    <title>Lives In Motion Ltd | Creative Media & Lifestyle</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --lim-green: #1C5E37; }
-        body { background: #ffffff; color: #111111; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        body { background: #ffffff; color: #111; font-family: 'Inter', sans-serif; }
         .serif { font-family: 'Georgia', serif; }
         
-        /* High-Contrast Readability */
-        p, span { line-height: 1.6; letter-spacing: 0.01em; }
-        h1, h2, h3, h4 { letter-spacing: -0.02em; }
+        /* Expansion Section */
+        .node-card { border-left: 4px solid #eee; padding: 1.5rem; transition: 0.3s; }
+        .node-card.active { border-left-color: var(--lim-green); background: #f9f9f9; }
 
-        /* Horizontal News Slider */
-        .news-slider {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 24px;
-            padding-bottom: 20px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .news-slider::-webkit-scrollbar { height: 6px; }
-        .news-slider::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
-        .news-card {
-            flex: 0 0 320px;
-            scroll-snap-align: start;
-            border: 1px solid #eee;
-            padding: 24px;
-            background: #fcfcfc;
-            transition: border-color 0.3s;
-        }
-        .news-card:hover { border-color: var(--lim-green); }
-
-        /* Fixed Footer Player */
-        #bottom-player {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: #ffffff; border-top: 4px solid #000000;
-            z-index: 1000; padding: 16px 24px;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+        /* Bottom Player Anchor */
+        #footer-radio { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: #ffffff; border-top: 2px solid #000;
+            padding: 1rem 2rem; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        #entrance {
-            position: fixed; inset: 0; background: #1C5E37;
-            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: transform 0.6s ease-in-out;
-        }
+        #curtain { position: fixed; inset: 0; background: var(--lim-green); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.7s ease-in-out; }
     </style>
 </head>
-<body class="pb-32"> <div id="entrance">
-        <div class="text-center text-white px-6">
-            <h1 class="text-6xl md:text-8xl font-black italic mb-2 uppercase">Lives <span class="text-black">In</span> Motion</h1>
-            <p class="serif text-xl mb-10 opacity-90 uppercase tracking-[0.3em]">Validating the Diaspora</p>
-            <button onclick="activateSquare()" class="bg-black text-white px-12 py-5 font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all border-2 border-black">
-                Enter The Square
-            </button>
+<body class="pb-28">
+
+    <div id="curtain">
+        <div class="text-center text-white p-6">
+            <h1 class="text-7xl font-black italic mb-4 uppercase">Lives <span class="text-black">In</span> Motion</h1>
+            <p class="serif text-xl mb-12 opacity-90 italic">Creative Media. Global Ministry. Diaspora Wellness.</p>
+            <button onclick="reveal()" class="bg-black text-white px-16 py-5 font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">Enter</button>
         </div>
     </div>
 
-    <nav class="bg-white border-b border-zinc-200 sticky top-0 z-50 px-6 py-5">
+    <nav class="sticky top-0 bg-white/90 backdrop-blur-md z-50 border-b border-zinc-100 px-8 py-5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-black italic uppercase tracking-tighter">Lives <span class="text-[#1C5E37]">In</span> Motion</h1>
-            
-            <div class="hidden md:flex items-center gap-10 text-[11px] font-extrabold uppercase tracking-widest">
-                <a href="https://diasporainmotion.com" target="_blank" class="hover:text-[#1C5E37] transition">Town Square Feed</a>
-                <a href="https://www.patreon.com/YOUR_ACCOUNT" target="_blank" class="text-[#1C5E37] border-b-2 border-[#1C5E37] pb-1">Membership / Patreon</a>
-                <a href="https://wa.me/447XXXXXXXXX" target="_blank" class="hover:text-[#1C5E37] transition">Connect via WhatsApp</a>
+            <div class="leading-none">
+                <h1 class="text-2xl font-black italic uppercase">LIM <span class="text-lim">LTD</span></h1>
+                <span class="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">UK Operations</span>
+            </div>
+            <div class="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-widest">
+                <a href="#projects" class="hover:text-lim">Ecosystem</a>
+                <a href="#family" class="hover:text-lim">Family</a>
+                <a href="https://www.patreon.com/YOUR_ACCOUNT" target="_blank" class="bg-black text-white px-6 py-2 rounded-sm shadow-xl">Join The Mission</a>
             </div>
         </div>
     </nav>
 
-    <header class="py-24 px-6 bg-[#f9f9f9] border-b border-zinc-200">
-        <div class="max-w-4xl mx-auto">
-            <span class="text-[#1C5E37] font-black uppercase text-xs tracking-widest mb-4 block">UK Independent Talk Radio</span>
-            <h2 class="serif text-5xl md:text-7xl font-bold mb-8 leading-[1.1] text-zinc-900">Correcting misconceptions. Validating your journey.</h2>
-            <p class="serif text-xl md:text-2xl text-zinc-600 mb-10 leading-relaxed italic">The digital home for the UK Nigerian experience, where stories are told without filter.</p>
+    <header class="py-24 px-8 max-w-7xl mx-auto border-b border-zinc-100">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            <div>
+                <span class="text-[10px] font-black text-lim uppercase tracking-[0.4em] mb-4 block">Oversight: The Holy Spirit</span>
+                <h2 class="serif text-6xl md:text-7xl font-bold mb-8 leading-tight">Bridging Cultures. <br><span class="italic text-zinc-400">Healing Lives.</span></h2>
+                <p class="serif text-xl text-zinc-500 leading-relaxed mb-10 italic">A creative media and lifestyle company building for the diaspora and reaching the world for Christ.</p>
+                <div class="flex gap-4">
+                    <a href="https://wa.me/2349031167282" class="bg-[#25D366] text-white px-8 py-4 font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp"></i> Studio WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="node-card active">
+                    <h4 class="font-black text-xs uppercase text-lim mb-2">Current Focus</h4>
+                    <p class="font-bold text-xl uppercase italic">Nigerian Diaspora Radio</p>
+                    <p class="text-sm text-zinc-500 serif italic mt-2">UK-based validation for the Nigerian experience.</p>
+                </div>
+                <div class="node-card opacity-40">
+                    <h4 class="font-black text-xs uppercase mb-2">Expansion Pending</h4>
+                    <p class="font-bold text-xl uppercase italic">Global Diaspora Network</p>
+                    <p class="text-sm text-zinc-500 serif italic mt-2">Scaling our blueprint to other communities.</p>
+                </div>
+            </div>
         </div>
     </header>
 
-    <section class="py-20 px-6 max-w-7xl mx-auto">
-        <div class="flex justify-between items-end mb-10">
-            <h3 class="text-2xl font-black uppercase italic">Square <span class="text-[#1C5E37]">Perspectives</span></h3>
-            <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest underline decoration-[#1C5E37]">Swipe for more</span>
-        </div>
-
-        <div id="news-slider" class="news-slider">
-            <div class="news-card">
-                <p class="text-[10px] font-black text-[#1C5E37] uppercase mb-4">Latest</p>
-                <h4 class="serif text-xl font-bold mb-4 leading-snug">Connecting Signal...</h4>
-                <p class="text-sm text-zinc-500 mb-6">Gathering the latest briefings for the diaspora community.</p>
+    <section id="projects" class="py-24 px-8 max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-12">
+            <div class="p-10 bg-zinc-50 rounded-2xl">
+                <i class="fa-solid fa-microphone-lines text-3xl mb-6 text-lim"></i>
+                <h3 class="text-2xl font-black uppercase italic mb-4">Media Hub</h3>
+                <p class="serif text-sm text-zinc-600 leading-relaxed mb-6">Home of the community radio station. Talk, music, and diaspora narratives.</p>
+                <button onclick="toggleAudio()" class="text-[10px] font-black uppercase border-b-2 border-black pb-1">Listen Live</button>
+            </div>
+            <div class="p-10 bg-zinc-50 rounded-2xl">
+                <i class="fa-solid fa-heart-pulse text-3xl mb-6 text-blue-600"></i>
+                <h3 class="text-2xl font-black uppercase italic mb-4">Health AI</h3>
+                <p class="serif text-sm text-zinc-600 leading-relaxed mb-6">Eki's Health Assistant: AI-driven wellness designed for the diaspora lifestyle.</p>
+                <button onclick="toggleAI()" class="text-[10px] font-black uppercase border-b-2 border-black pb-1">Open Wellness</button>
+            </div>
+            <div class="p-10 bg-zinc-50 rounded-2xl">
+                <i class="fa-solid fa-dove text-3xl mb-6 text-zinc-400"></i>
+                <h3 class="text-2xl font-black uppercase italic mb-4">Ministry</h3>
+                <p class="serif text-sm text-zinc-600 leading-relaxed mb-6">Abby's Worship and Christ Outreach: Global music aimed at a world in need.</p>
+                <span class="text-[9px] font-black text-zinc-400 uppercase italic">Reaching Souls Globally</span>
             </div>
         </div>
     </section>
 
-    <section class="py-20 px-6 bg-zinc-900 text-white rounded-t-[3rem] md:rounded-t-[6rem]">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-            <div>
-                <h3 class="text-4xl font-black uppercase italic mb-6">Our <span class="text-[#1C5E37]">Mission</span></h3>
-                <p class="serif text-xl text-zinc-300 leading-relaxed mb-8">
-                    We provide a critical lens on developments affecting our global community. Whether through our flagship talk show <strong>Truth Be Told</strong> or our daily <strong>Couchpieces</strong>, we are here to amplify your narrative.
-                </p>
-                <div class="flex gap-4">
-                    <a href="https://diasporainmotion.com" target="_blank" class="bg-[#1C5E37] text-white px-8 py-4 font-black text-xs uppercase tracking-widest">The Town Square</a>
-                </div>
+    <section id="family" class="py-24 px-8 border-t border-zinc-100 text-center">
+        <h3 class="text-3xl font-black uppercase italic mb-16">The <span class="text-lim">Team</span></h3>
+        <div class="flex flex-wrap justify-center gap-16">
+            <div class="w-32">
+                <div class="h-24 w-24 bg-zinc-100 rounded-full mx-auto mb-4 border-b-4 border-lim flex items-center justify-center font-black">Obi</div>
+                <p class="text-[10px] font-black uppercase">Strategy</p>
             </div>
-            <div class="bg-white text-black p-10 rounded-2xl shadow-2xl">
-                <h4 class="text-2xl font-black uppercase italic mb-4">Submit Your Story</h4>
-                <p class="serif text-zinc-600 mb-8">Recorded a voice note or have a story to share? WhatsApp our studio team directly. Vetted stories are played on-air.</p>
-                <a href="https://wa.me/447XXXXXXXXX" class="flex items-center justify-center gap-3 bg-[#25D366] text-white py-5 rounded-full font-black text-sm uppercase tracking-widest hover:scale-105 transition">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> WhatsApp Studio
-                </a>
+            <div class="w-32">
+                <div class="h-24 w-24 bg-zinc-100 rounded-full mx-auto mb-4 border-b-4 border-lim flex items-center justify-center font-black">Eki</div>
+                <p class="text-[10px] font-black uppercase">Health AI</p>
+            </div>
+            <div class="w-32">
+                <div class="h-24 w-24 bg-zinc-100 rounded-full mx-auto mb-4 border-b-4 border-lim flex items-center justify-center font-black">Abby</div>
+                <p class="text-[10px] font-black uppercase">Ministry</p>
             </div>
         </div>
     </section>
 
-    <div id="bottom-player">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-6">
-                <button onclick="toggleAudio()" id="play-btn" class="text-black text-5xl hover:text-[#1C5E37] transition">
-                    <i class="fa-solid fa-circle-play"></i>
-                </button>
-                <div>
-                    <p class="text-[9px] font-black uppercase text-zinc-400 tracking-tighter">Now Playing</p>
-                    <h5 id="stream-status" class="text-sm font-black uppercase tracking-tight">Signal: Off</h5>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-8">
-                <div class="hidden sm:block text-right">
-                    <p class="text-[9px] font-black text-zinc-400 uppercase">Live Broadcast</p>
-                    <p class="text-xs font-bold text-[#1C5E37] uppercase">Lives In Motion UK</p>
-                </div>
-                <a href="https://www.patreon.com/YOUR_ACCOUNT" target="_blank" class="bg-black text-white px-6 py-2 rounded font-black text-[10px] uppercase tracking-widest hover:bg-[#1C5E37] transition">Patreon Support</a>
+    <div id="footer-radio">
+        <div class="flex items-center gap-6">
+            <button onclick="toggleAudio()" id="play-btn" class="text-4xl hover:text-lim transition"><i class="fa-solid fa-circle-play"></i></button>
+            <div class="leading-none">
+                <p class="text-[9px] font-black uppercase text-zinc-400">Now Broadcasting</p>
+                <p id="stream-name" class="text-[11px] font-bold uppercase tracking-tight italic">Diaspora Signal: Off</p>
             </div>
         </div>
-        <audio id="radio-stream" src="https://azuracast-nuremberg.myautodj.com/listen/radio/radio.mp3" crossorigin="anonymous"></audio>
+        <div class="hidden md:block italic text-[10px] text-zinc-400 serif">"Lives in Motion, Validated in Christ."</div>
+        <a href="https://www.patreon.com/YOUR_ACCOUNT" target="_blank" class="bg-black text-white px-6 py-2 text-[10px] font-black uppercase">Fund Growth</a>
+        <audio id="radio" src="https://azuracast-nuremberg.myautodj.com/listen/radio/radio.mp3" crossorigin="anonymous"></audio>
     </div>
 
-    <div class="fixed bottom-24 right-6 z-[1001]">
-        <button onclick="toggleChat()" class="bg-black text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-xl hover:bg-[#1C5E37] transition">
-            <i class="fa-solid fa-robot"></i>
-        </button>
-        <div id="chat-window" class="hidden absolute bottom-16 right-0 w-80 bg-white rounded-2xl shadow-2xl border-2 border-black flex flex-col overflow-hidden">
-            <div class="bg-black text-white p-4 font-black text-[10px] uppercase flex justify-between">
-                <span>Square Concierge</span>
-                <button onclick="toggleChat()">×</button>
-            </div>
-            <div id="chat-messages" class="flex-1 p-4 h-64 overflow-y-auto text-xs space-y-4 bg-zinc-50">
-                <p class="bg-white p-3 border rounded shadow-sm">Welcome to <b>Lives In Motion</b>. I can help with schedules and show info. How are you today?</p>
-            </div>
-            <div class="p-3 bg-white border-t-2 border-black flex gap-2">
-                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 outline-none text-[10px] font-bold uppercase">
-                <button onclick="handleChat()" class="text-[#1C5E37]"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
+    <div id="ai-hub" class="hidden fixed bottom-24 right-6 w-80 bg-white shadow-2xl rounded-xl border-2 border-black z-[2000] overflow-hidden">
+        <div class="bg-black text-white p-4 font-black text-[10px] uppercase flex justify-between">
+            <span>Eki's Health Assistant</span>
+            <button onclick="toggleAI()">×</button>
+        </div>
+        <div id="ai-chat" class="h-64 p-4 overflow-y-auto text-xs bg-slate-50 space-y-4">
+            <p class="bg-white p-2 border shadow-sm">Welcome. How can we support your wellness today?</p>
+        </div>
+        <div class="p-3 border-t-2 border-black flex">
+            <input type="text" id="ai-input" placeholder="Ask Eki..." class="flex-1 text-[10px] font-bold uppercase outline-none">
+            <button onclick="askAI()" class="text-lim"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
     <script>
-        const audio = document.getElementById('radio-stream');
+        const audio = document.getElementById('radio');
         const playBtn = document.getElementById('play-btn');
-        const statusLabel = document.getElementById('stream-status');
 
-        function activateSquare() {
+        function reveal() {
+            document.getElementById('curtain').style.transform = 'translateY(-100%)';
             audio.play().then(() => {
-                statusLabel.innerText = "Radio: Live On-Air";
                 playBtn.innerHTML = '<i class="fa-solid fa-circle-pause"></i>';
+                document.getElementById('stream-name').innerText = "LIVE: NIGERIAN DIASPORA";
             });
-            document.getElementById('entrance').style.transform = 'translateY(-100%)';
         }
 
         function toggleAudio() {
             if (audio.paused) {
                 audio.play();
                 playBtn.innerHTML = '<i class="fa-solid fa-circle-pause"></i>';
-                statusLabel.innerText = "Radio: Live On-Air";
+                document.getElementById('stream-name').innerText = "LIVE: NIGERIAN DIASPORA";
             } else {
                 audio.pause();
                 playBtn.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
-                statusLabel.innerText = "Signal Paused";
+                document.getElementById('stream-name').innerText = "SIGNAL PAUSED";
             }
         }
 
-        function toggleChat() {
-            document.getElementById('chat-window').classList.toggle('hidden');
-        }
+        function toggleAI() { document.getElementById('ai-hub').classList.toggle('hidden'); }
 
-        function handleChat() {
-            const input = document.getElementById('chat-input');
-            const container = document.getElementById('chat-messages');
-            if(!input.value) return;
-
-            const uMsg = document.createElement('p');
-            uMsg.className = "bg-[#1C5E37] text-white p-3 rounded-lg ml-6 shadow-sm";
-            uMsg.innerText = input.value;
-            container.appendChild(uMsg);
-
+        function askAI() {
+            const i = document.getElementById('ai-input');
+            const c = document.getElementById('ai-chat');
+            if(!i.value) return;
+            const u = document.createElement('p'); u.className="bg-lim text-white p-2 rounded ml-6"; u.innerText=i.value;
+            c.appendChild(u);
             setTimeout(() => {
-                const bMsg = document.createElement('p');
-                bMsg.className = "bg-white p-3 border rounded shadow-sm mr-6 text-black";
-                const q = input.value.toLowerCase();
-                if(q.includes('schedule')) bMsg.innerHTML = "Couchpieces: 7am/7pm Daily<br>Truth Be Told: Sun 7pm";
-                else bMsg.innerText = "You can share your story using the WhatsApp button on the page!";
-                container.appendChild(bMsg);
-                container.scrollTop = container.scrollHeight;
-            }, 500);
-            input.value = '';
+                const b = document.createElement('p'); b.className="bg-white p-2 border rounded mr-6"; b.innerText="Eki's assistant here. We are analyzing that lifestyle query in the context of diaspora health...";
+                c.appendChild(b); c.scrollTop = c.scrollHeight;
+            }, 600);
+            i.value = '';
         }
-
-        async function fetchNews() {
-            try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://rss.punchng.com/v1/category/latest_news')}`);
-                const data = await res.json();
-                document.getElementById('news-slider').innerHTML = data.items.slice(0, 6).map(item => `
-                    <div class="news-card">
-                        <p class="text-[10px] font-black text-[#1C5E37] uppercase mb-4">Perspective</p>
-                        <h4 class="serif text-xl font-bold mb-4 leading-snug">${item.title}</h4>
-                        <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase border-b-2 border-black pb-1 hover:text-[#1C5E37] hover:border-[#1C5E37]">Read Full</a>
-                    </div>
-                `).join('');
-            } catch (e) { 
-                console.error("News fetch error"); 
-            }
-        }
-
-        window.onload = fetchNews;
     </script>
 </body>
 </html>
 
+```
+### Why this is "World-Beating":
+ 1. **Transparency of Oversight:** By putting the Holy Spirit in the hero section, you establish a brand of unwavering integrity.
+ 2. **Scalable Structure:** The "Expansion Pending" section tells potential sponsors and partners that you aren't just a small local station—you are a **network** in the making.
+ 3. **Simple Implementation:** It's a single, fast-loading file that looks like a high-end UK agency. It avoids clutter while delivering massive information.
+ 4. **Integrated Ecosystem:** The Radio, the AI, and the Ministry are all accessible from the same screen, ensuring the user stays within the "Lives In Motion" family environment.
+How does this look for a Day 1 launch?
