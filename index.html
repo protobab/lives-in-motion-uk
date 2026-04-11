@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --lim-green: #1C5E37; --lim-blue: #0EA5E9; }
-        body { background: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; }
         .serif { font-family: 'Georgia', serif; }
         
         .hero-banner {
@@ -19,7 +19,7 @@
         .project-card {
             position: relative; height: 380px; border-radius: 20px; overflow: hidden;
             display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem;
-            color: white; transition: all 0.3s ease; box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            color: white; box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
         .project-card::before {
             content: ''; position: absolute; inset: 0; 
@@ -35,23 +35,13 @@
         @keyframes bubble { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         .ai-bubble { animation: bubble 3s ease-in-out infinite; }
 
-        .square-btn {
-            background: white; color: var(--lim-green);
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
-            transition: 0.3s;
-        }
+        /* News Widget Container */
+        .news-wrapper { height: 600px; overflow: hidden; border-radius: 20px; border: 1px solid #eee; }
 
-        #news-feed::-webkit-scrollbar { width: 4px; }
-        #news-feed::-webkit-scrollbar-thumb { background: var(--lim-blue); border-radius: 10px; }
-        
-        #radio-bar {
-            position: fixed; bottom: 0; left: 0; right: 0; 
-            background: #fff; border-top: 4px solid var(--lim-green);
-            z-index: 1000; padding: 12px 24px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-        }
+        footer { background: #f8fafc; border-top: 1px solid #e2e8f0; }
     </style>
 </head>
-<body class="pb-24">
+<body>
 
     <header class="hero-banner pt-10 pb-28 px-6 text-white text-center">
         <nav class="max-w-7xl mx-auto flex justify-between items-center mb-16">
@@ -70,7 +60,7 @@
             </p>
             
             <div class="flex flex-col items-center">
-                <a href="https://diasporainmotion.com" target="_blank" class="square-btn px-10 py-5 rounded-full font-black uppercase tracking-widest text-sm flex items-center gap-4">
+                <a href="https://diasporainmotion.com" target="_blank" class="bg-white text-emerald-900 px-10 py-5 rounded-full font-black uppercase tracking-widest text-sm flex items-center gap-4 shadow-2xl hover:bg-sky-500 hover:text-white transition">
                     <i class="fa-solid fa-users-viewfinder text-xl"></i>
                     Visit the Diaspora Town Square
                 </a>
@@ -110,93 +100,54 @@
 
     <section id="news" class="py-24 px-6 max-w-7xl mx-auto">
         <h3 class="text-3xl font-black italic uppercase mb-10">Global <span class="text-sky-500">Briefing</span></h3>
-        <div id="news-feed" class="h-[600px] overflow-y-auto pr-4 space-y-6">
-            <p class="text-center py-20 text-zinc-400 italic">Syncing global headlines...</p>
+        <div class="news-wrapper">
+            <iframe src="https://rss.app/embed/v1/wall/oyv7s8m00vj09v06" frameborder="0" style="width: 100%; height: 600px;"></iframe>
         </div>
+        <p class="text-[9px] font-bold text-zinc-400 mt-4 uppercase tracking-widest text-center italic">Curating Nigerian, Global, and Christian headlines in real-time</p>
     </section>
 
-    <div class="fixed bottom-28 right-8 z-[2000]">
+    <div class="fixed bottom-10 right-8 z-[2000]">
         <a href="https://healthcare.easylinkcloud.online/easy-link-assistant/" target="_blank" class="ai-bubble bg-sky-500 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-2xl border-2 border-white transition-transform hover:scale-110">
             <i class="fa-solid fa-notes-medical"></i>
         </a>
     </div>
 
-    <div id="radio-bar">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <button id="play-trigger" onclick="toggleRadio()" class="text-4xl text-zinc-900 transition">
-                    <i class="fa-solid fa-circle-play"></i>
-                </button>
+    <footer class="py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-2">
+                    <h1 class="text-xl font-black italic uppercase mb-4">Lives In Motion</h1>
+                    <p class="serif text-sm text-zinc-500 max-w-md leading-relaxed">
+                        Registered in the United Kingdom. We are dedicated to the validation of the diaspora through faith-led media, wellness technology, and creative ministry.
+                    </p>
+                </div>
                 <div>
-                    <p class="text-[9px] font-black uppercase text-zinc-400">Broadcasting Now</p>
-                    <p id="station-status" class="text-[11px] font-bold uppercase tracking-tight">Lives In Motion Radio</p>
+                    <h4 class="text-[10px] font-black uppercase mb-4 tracking-widest text-zinc-400">Compliance</h4>
+                    <ul class="text-xs space-y-2 font-bold uppercase tracking-tight">
+                        <li><a href="#" class="hover:text-sky-500">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-sky-500">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-sky-500">Cookies Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-black uppercase mb-4 tracking-widest text-zinc-400">Connect</h4>
+                    <ul class="text-xs space-y-2 font-bold uppercase tracking-tight">
+                        <li><a href="https://wa.me/2349031167282" target="_blank" class="text-emerald-600">WhatsApp Studio</a></li>
+                        <li><a href="https://www.instagram.com/livesinmotion26" target="_blank" class="text-pink-600">Instagram</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="hidden sm:flex items-center gap-6">
-                <a href="https://wa.me/2349031167282" target="_blank" class="bg-[#25D366] text-white px-4 py-1 rounded text-[10px] font-black uppercase">WhatsApp Studio</a>
+            <div class="pt-8 border-t border-zinc-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                    &copy; 2026 Lives In Motion Ltd. All Rights Reserved.
+                </p>
+                <div class="flex gap-6 text-[9px] font-black text-zinc-300 uppercase">
+                    <span>UK Company No. [Insert Number]</span>
+                    <span>VAT: [Insert VAT]</span>
+                </div>
             </div>
         </div>
-        <audio id="station-audio" src="https://azuracast-nuremberg.myautodj.com/hls/station_8321_1775290855/live.m3u8" crossorigin="anonymous"></audio>
-    </div>
+    </footer>
 
-    <script>
-        const audio = document.getElementById('station-audio');
-        const playBtn = document.getElementById('play-trigger');
-        const statusText = document.getElementById('station-status');
-
-        function toggleRadio() {
-            if (audio.paused) {
-                audio.play().catch(e => {
-                    // If HLS fails, fallback to the direct MP3 link
-                    audio.src = "https://azuracast-nuremberg.myautodj.com/listen/radio/radio.mp3";
-                    audio.play();
-                });
-                playBtn.innerHTML = '<i class="fa-solid fa-circle-pause text-sky-500"></i>';
-                statusText.innerText = "Streaming: Diaspora Radio";
-                statusText.classList.add('text-sky-500');
-            } else {
-                audio.pause();
-                playBtn.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
-                statusText.innerText = "Signal Paused";
-                statusText.classList.remove('text-sky-500');
-            }
-        }
-
-        // Updated News Fetch with multiple sources and better error handling
-        async function fetchNews() {
-            const newsContainer = document.getElementById('news-feed');
-            const feedUrl = 'https://rss.punchng.com/v1/category/latest_news';
-            
-            try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=oyv7s8m00vj09v06r1y4u8n2poy8q9t9v9y9v9y9`);
-                const data = await res.json();
-                
-                if (data.status === 'ok') {
-                    let html = '';
-                    data.items.forEach((item, index) => {
-                        const cats = ['POLITICS', 'TECH', 'CHURCH', 'SPORTS', 'CULTURE'];
-                        const cat = cats[index % cats.length];
-                        const img = item.enclosure.link || 'https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&q=80&w=400';
-                        
-                        html += `
-                            <div class="flex flex-col md:flex-row gap-6 border-b border-zinc-100 pb-8 hover:bg-zinc-50 transition p-4 rounded-xl">
-                                <img src="${img}" class="w-full md:w-48 h-32 object-cover rounded-lg bg-zinc-100">
-                                <div class="flex-1">
-                                    <span class="text-[10px] font-black uppercase text-sky-500 mb-2 block">${cat}</span>
-                                    <h4 class="text-xl font-bold mb-2"><a href="${item.link}" target="_blank">${item.title}</a></h4>
-                                    <p class="text-sm text-zinc-500 serif leading-relaxed">${item.description.substring(0, 120)}...</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    newsContainer.innerHTML = html;
-                }
-            } catch (e) {
-                newsContainer.innerHTML = '<p class="text-center p-12">Unable to load feed. Please check connection.</p>';
-            }
-        }
-
-        window.onload = fetchNews;
-    </script>
 </body>
 </html>
