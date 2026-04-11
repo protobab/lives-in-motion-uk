@@ -11,234 +11,168 @@
         body { background: #ffffff; color: #1a1a1a; font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
         .serif { font-family: 'Georgia', serif; }
         
-        /* Adjusted Banner to prevent overlap */
         .hero-banner {
             background: linear-gradient(135deg, var(--lim-green) 0%, #064e3b 40%, var(--lim-blue) 100%);
-            padding-bottom: 180px; /* Space for the cards below */
+            padding-bottom: 160px;
             clip-path: polygon(0 0, 100% 0, 100% 88%, 0 96%);
         }
 
-        /* 1. ROW DESIGN - RADIO & SCHEDULE */
-        .radio-schedule-row {
-            display: grid; grid-template-columns: 1fr; gap: 24px;
-            max-width: 1400px; margin: -140px auto 0; padding: 0 24px;
+        /* TABS LOGIC */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { border-bottom: 3px solid var(--lim-blue); color: white; opacity: 1; }
+
+        /* MERGED COMMAND CENTER */
+        .command-center {
+            max-width: 1200px; margin: -120px auto 0; padding: 0 24px;
             position: relative; z-index: 20;
         }
-        @media (min-width: 1024px) {
-            .radio-schedule-row { grid-template-columns: 3fr 2fr; align-items: stretch; }
-        }
 
-        /* Radio Panel */
-        .radio-control-panel {
+        .station-terminal {
             background: #0f172a; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1);
-            padding: 3rem; color: white; box-shadow: 0 40px 70px -15px rgba(0, 0, 0, 0.5);
+            overflow: hidden; box-shadow: 0 40px 70px -15px rgba(0, 0, 0, 0.5);
         }
 
-        /* Schedule Panel */
-        .schedule-control-panel {
-            background: #ffffff; border-radius: 32px; border: 1px solid #e2e8f0;
-            overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 550px;
+        /* PROJECT TILES (SHRUNK & STATIC) */
+        .project-row {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+            max-width: 1200px; margin: 40px auto; padding: 0 24px;
         }
+        .static-card {
+            height: 220px; border-radius: 20px; overflow: hidden; position: relative;
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .static-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); z-index: 1; }
 
-        /* 2. ROW DESIGN - PROJECTS REVOLVER */
-        .projects-row {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;
-            max-width: 1400px; margin: 48px auto 0; padding: 0 24px;
-        }
-
-        .project-card {
-            height: 380px; border-radius: 28px; overflow: hidden; position: relative;
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem; color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .project-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); z-index: 1; }
-        
-        /* News Slider */
+        /* VISUAL NEWS FEED */
         .news-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 20px 0; scrollbar-width: none; }
         .news-slider::-webkit-scrollbar { display: none; }
-        .news-slide {
-            flex: 0 0 300px; scroll-snap-align: start; background: #fafafa; border-top: 4px solid var(--lim-blue);
-            padding: 20px; border-radius: 12px; height: 210px; display: flex; flex-direction: column; justify-content: space-between;
+        
+        .visual-news-card {
+            flex: 0 0 320px; scroll-snap-align: start; height: 400px; border-radius: 24px;
+            overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 1.5rem; color: white; transition: transform 0.3s ease;
         }
-
-        #legal-modal { background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; z-index: 9999; }
-        .foot-tile { background: white; border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .visual-news-card:hover { transform: translateY(-8px); }
+        .visual-news-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+        .visual-news-card::after { 
+            content: ''; position: absolute; inset: 0; 
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, rgba(0,0,0,0.4) 50%, transparent 100%); 
+            z-index: 1; 
+        }
+        .news-info { position: relative; z-index: 2; }
     </style>
 </head>
-<body onload="initializeOasis()">
+<body onload="fetchVisualNews()">
 
     <header class="hero-banner pt-12 px-6 text-white text-center">
-        <nav class="max-w-7xl mx-auto flex justify-between items-center mb-20">
-            <h1 class="text-3xl font-black italic tracking-tighter uppercase leading-none">
-                Lives <span class="text-sky-300">In</span> Motion
-            </h1>
-            <div class="hidden md:flex gap-8 text-[10px] font-black uppercase tracking-widest">
-                <a href="#projects" class="hover:text-sky-300 transition">Station</a>
-                <a href="#news" class="hover:text-sky-300 transition">Briefing</a>
-                <a href="https://www.patreon.com/cw/LivesInMotion/membership" target="_blank" class="bg-amber-400 text-black px-6 py-2.5 rounded-full font-black shadow-lg hover:scale-105 transition-transform uppercase">Membership</a>
-            </div>
+        <nav class="max-w-7xl mx-auto flex justify-between items-center mb-16">
+            <h1 class="text-2xl font-black italic tracking-tighter uppercase">Lives <span class="text-sky-300">In</span> Motion</h1>
+            <a href="https://www.patreon.com/cw/LivesInMotion/membership" target="_blank" class="bg-amber-400 text-black px-5 py-2 rounded-full font-black text-[10px] uppercase shadow-lg">Membership</a>
         </nav>
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-6xl md:text-8xl font-black italic uppercase leading-none mb-6">Enjoying <br>the Journey.</h2>
-            <p class="serif text-xl md:text-2xl italic opacity-95">Creative Media • Christian Outreach • Diasporan Oasis</p>
-        </div>
+        <h2 class="text-5xl md:text-7xl font-black italic uppercase leading-none mb-4">Enjoying <br>the Journey.</h2>
+        <p class="serif text-lg md:text-xl italic opacity-90">Creative Media • Christian Outreach • Diasporan Oasis</p>
     </header>
 
-    <section id="projects" class="radio-schedule-row">
-        
-        <div class="radio-control-panel flex flex-col justify-between">
-            <div>
-                <div class="flex items-center gap-3 mb-8 text-red-500">
-                    <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                    <span class="text-[11px] font-black uppercase tracking-[0.4em]">Lives In Motion Radio • ON AIR</span>
-                </div>
-                <h3 class="text-4xl md:text-5xl font-black italic uppercase mb-4 tracking-tighter leading-none">The Diaspora Voice</h3>
-                <p class="text-base text-zinc-300 serif italic mb-10 max-w-xl leading-relaxed">
-                    Real lives, Authentic stories, Enlivening conversations and Spiritual food for your journey of life, diaspora or not!
-                </p>
+    <section class="command-center">
+        <div class="station-terminal">
+            <div class="flex bg-white/5 border-b border-white/10">
+                <button onclick="openTab('live-player')" id="btn-live-player" class="tab-btn active px-8 py-5 text-[11px] font-black uppercase tracking-widest opacity-50 hover:opacity-100 transition">Live Player</button>
+                <button onclick="openTab('station-schedule')" id="btn-station-schedule" class="tab-btn px-8 py-5 text-[11px] font-black uppercase tracking-widest opacity-50 hover:opacity-100 transition">Schedule</button>
             </div>
-            
-            <div class="bg-white/5 p-6 rounded-3xl border border-white/10 shadow-inner">
-                <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/embed?allow_popup=1&continuous=1" frameborder="0" style="width: 100%; height: 140px; border-radius: 16px;"></iframe>
-            </div>
-        </div>
 
-        <div class="schedule-control-panel">
-            <div class="p-6 border-b border-zinc-100 flex justify-between items-center bg-zinc-50">
-                <div>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">Station Hub</span>
-                    <h4 class="text-xl font-black italic uppercase text-zinc-900 leading-none">Programming</h4>
-                </div>
-                <i class="fa-solid fa-clock-rotate-left text-sky-500"></i>
-            </div>
-            <div class="flex-1 overflow-y-auto">
-                <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/schedule/embed" frameborder="0" allowtransparency="true" style="width: 100%; height: 900px; border: 0;"></iframe>
-            </div>
-        </div>
-    </section>
-
-    <section class="projects-row" id="projects-revolver">
-        
-        <div class="project-card" id="card-wellness" style="background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=600') center/cover; order: 1;">
-            <div class="relative z-10">
-                <span class="bg-emerald-600 text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase tracking-widest">Wellness AI</span>
-                <h3 class="text-2xl font-black italic uppercase mb-2 leading-tight">Health <br>Concierge</h3>
-                <p class="text-xs text-zinc-100 serif italic mb-6 leading-relaxed">Evidence-based, anonymous wellness for the diaspora.</p>
-                <a href="https://healthcare.easylinkcloud.online/easy-link-assistant/" target="_blank" class="bg-white text-black py-3 rounded-full font-black text-[10px] uppercase block text-center shadow-lg hover:scale-105 transition">Access Assistant</a>
-            </div>
-        </div>
-
-        <div class="project-card" id="card-worship" style="background: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=600') center/cover; order: 2;">
-            <div class="relative z-10">
-                <span class="bg-lim-green text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase tracking-widest">Outreach</span>
-                <h3 class="text-2xl font-black italic uppercase mb-2 leading-tight">Media & <br>Worship</h3>
-                <p class="text-xs text-zinc-100 serif italic mb-6 leading-relaxed">Spreading the Gospel through sound, story, and sanctuary.</p>
-                <button class="bg-white/20 text-white border border-white/40 py-3 rounded-full font-black text-[10px] uppercase w-full backdrop-blur-sm">Opening Soon</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="news" class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h3 class="text-3xl font-black italic uppercase tracking-tighter">The Briefing</h3>
-                <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em]">Nigeria • International • Christian • Technology</p>
-            </div>
-        </div>
-        <div id="news-slider" class="news-slider">
-            <div class="p-10 text-center text-zinc-300 italic w-full">Connecting to global news streams...</div>
-        </div>
-    </section>
-
-    <footer class="py-16 px-6 border-t border-zinc-100 bg-zinc-50/50">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid lg:grid-cols-2 gap-12 items-center mb-12">
-                <div>
-                    <h2 class="text-2xl font-black italic uppercase mb-2">Lives In Motion</h2>
-                    <p class="serif text-lg text-zinc-500 italic mb-2">Registered in the United Kingdom.</p>
-                    <p class="text-lim-green font-black uppercase text-xs tracking-[0.2em]">Real Lives, Real Motion, Real Service.</p>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <a href="https://wa.me/2349031167282" target="_blank" class="foot-tile">
-                        <i class="fa-brands fa-whatsapp text-emerald-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase">Studio WhatsApp</span>
-                    </a>
-                    <a href="https://www.instagram.com/livesinmotion26" target="_blank" class="foot-tile">
-                        <i class="fa-brands fa-instagram text-pink-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase">Instagram</span>
-                    </a>
-                    <div onclick="toggleLegal(true)" class="foot-tile">
-                        <i class="fa-solid fa-scale-balanced text-sky-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase">Privacy & Legal</span>
+            <div id="live-player" class="tab-content active p-8 md:p-12">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            <span class="text-[10px] font-black text-red-500 uppercase tracking-[0.3em]">The Diaspora Voice</span>
+                        </div>
+                        <h3 class="text-3xl font-black italic text-white uppercase mb-4 leading-tight">Lives In Motion Radio</h3>
+                        <p class="text-sm text-zinc-400 serif italic leading-relaxed">Real lives, Authentic stories, Enlivening conversations and Spiritual food for your journey of life.</p>
                     </div>
-                    <a href="https://www.patreon.com/cw/LivesInMotion/membership" target="_blank" class="foot-tile border-amber-300 bg-amber-50">
-                        <i class="fa-brands fa-patreon text-amber-600 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase">Membership</span>
-                    </a>
+                    <div class="bg-white/5 p-6 rounded-3xl border border-white/10">
+                        <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/embed?allow_popup=1&continuous=1" frameborder="0" style="width: 100%; height: 130px; border-radius: 12px;"></iframe>
+                    </div>
                 </div>
             </div>
+
+            <div id="station-schedule" class="tab-content">
+                <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/schedule/embed" frameborder="0" allowtransparency="true" style="width: 100%; height: 600px; border: 0;"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-row">
+        <div class="static-card" style="background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=400') center/cover;">
+            <div class="relative z-10">
+                <span class="text-[9px] font-black uppercase text-emerald-400 tracking-widest mb-1 block">Wellness AI</span>
+                <h4 class="text-xl font-black italic uppercase mb-3">Health Concierge</h4>
+                <a href="https://healthcare.easylinkcloud.online/easy-link-assistant/" target="_blank" class="inline-block bg-white text-black px-4 py-2 rounded-full text-[9px] font-black uppercase">Launch</a>
+            </div>
+        </div>
+        <div class="static-card" style="background: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=400') center/cover;">
+            <div class="relative z-10">
+                <span class="text-[9px] font-black uppercase text-sky-400 tracking-widest mb-1 block">Outreach</span>
+                <h4 class="text-xl font-black italic uppercase mb-3">Media & Worship</h4>
+                <span class="text-[9px] font-black uppercase opacity-60">Opening Soon</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="news" class="py-20 px-6 max-w-7xl mx-auto">
+        <h3 class="text-3xl font-black italic uppercase tracking-tighter mb-8">The <span class="text-sky-500">Briefing</span></h3>
+        <div id="news-slider" class="news-slider">
+            </div>
+    </section>
+
+    <footer class="py-12 border-t border-zinc-100 text-center">
+        <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400">© 2026 Lives In Motion Ltd | UK Registered Media Outreach</p>
+        <div class="flex justify-center gap-6 mt-4">
+            <a href="https://wa.me/2349031167282" class="text-zinc-300 hover:text-emerald-500 transition"><i class="fa-brands fa-whatsapp text-xl"></i></a>
+            <a href="https://www.instagram.com/livesinmotion26" class="text-zinc-300 hover:text-pink-500 transition"><i class="fa-brands fa-instagram text-xl"></i></a>
+            <a href="https://www.patreon.com/cw/LivesInMotion/membership" class="text-zinc-300 hover:text-amber-500 transition"><i class="fa-brands fa-patreon text-xl"></i></a>
         </div>
     </footer>
 
-    <div id="legal-modal" class="fixed inset-0 flex items-center justify-center p-6">
-        <div class="bg-white w-full max-w-lg rounded-3xl p-10 shadow-2xl relative border-t-8 border-sky-500">
-            <h2 class="text-2xl font-black italic uppercase mb-6">Legal Oasis</h2>
-            <div class="serif text-xs text-zinc-600 space-y-4 leading-relaxed overflow-y-auto max-h-[50vh] pr-4">
-                <p><strong>1. UK Compliance:</strong> Lives In Motion Ltd is a UK-registered entity. We process all data under UK GDPR.</p>
-                <p><strong>2. AI Wellness:</strong> Our AI Concierge is a wellness tool, not a medical diagnosis.</p>
-                <p><strong>3. Media Rights:</strong> Worship music and creative content are property of Lives In Motion Ltd.</p>
-            </div>
-            <button onclick="toggleLegal(false)" class="mt-8 bg-zinc-900 text-white py-3 rounded-full font-black text-[10px] uppercase w-full tracking-widest">Close</button>
-        </div>
-    </div>
-
     <script>
-        // NEWS ENGINE
-        async function fetchBroadBriefing() {
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        async function fetchVisualNews() {
             const slider = document.getElementById('news-slider');
-            const api = 'https://api.rss2json.com/v1/api.json?rss_url=';
-            const queries = [
-                'https://news.google.com/rss/search?q=Global+Breaking+News+Politics+Technology&hl=en-GB&gl=GB&ceid=GB:en',
-                'https://news.google.com/rss/search?q=Nigeria+Breaking+News+Politics+Culture&hl=en-NG&gl=NG&ceid=NG:en',
-                'https://news.google.com/rss/search?q=Global+Christian+News+Mission+Faith&hl=en-GB&gl=GB&ceid=GB:en'
+            const rssApi = 'https://api.rss2json.com/v1/api.json?rss_url=';
+            const feeds = [
+                'https://news.google.com/rss/search?q=Global+Christian+News+Nigeria+World&hl=en-GB&gl=GB&ceid=GB:en'
             ];
+            
             try {
-                const responses = await Promise.all(queries.map(q => fetch(api + encodeURIComponent(q))));
-                const results = await Promise.all(responses.map(r => r.json()));
-                let allItems = [...results[0].items, ...results[1].items, ...results[2].items].sort(() => Math.random() - 0.5);
-                slider.innerHTML = allItems.slice(0, 18).map(item => {
-                    const isNaija = item.link.includes('.ng') || item.title.toLowerCase().includes('nigeria');
-                    const isChristian = item.title.toLowerCase().includes('church') || item.title.toLowerCase().includes('faith') || item.title.toLowerCase().includes('christian');
-                    let label = 'WORLD UPDATE', color = 'text-sky-500';
-                    if (isNaija) { label = 'NIGERIA DIRECT'; color = 'text-emerald-600'; }
-                    if (isChristian) { label = 'GLOBAL FAITH'; color = 'text-amber-500'; }
-                    return `<div class="news-slide"><div><span class="text-[9px] font-black ${color} tracking-widest uppercase mb-2 block">${label}</span><h4 class="font-bold text-sm leading-tight text-zinc-800 line-clamp-4">${item.title}</h4></div><a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase text-zinc-400 hover:text-black transition">View →</a></div>`;
+                const res = await fetch(rssApi + encodeURIComponent(feeds[0]));
+                const data = await res.json();
+                
+                slider.innerHTML = data.items.slice(0, 10).map(item => {
+                    // Generate a high-quality relevant image based on title keywords or a random clean aesthetic if unavailable
+                    const fallbackImg = `https://images.unsplash.com/photo-1504711432869-efd597cdd042?auto=format&fit=crop&q=80&w=600`;
+                    const newsImage = item.enclosure?.link || item.thumbnail || fallbackImg;
+                    
+                    return `
+                        <a href="${item.link}" target="_blank" class="visual-news-card">
+                            <img src="${newsImage}" alt="news">
+                            <div class="news-info">
+                                <span class="text-[8px] font-black uppercase tracking-widest bg-sky-500 px-2 py-0.5 rounded-full mb-2 inline-block">Global Update</span>
+                                <h4 class="font-bold text-sm leading-tight line-clamp-3">${item.title}</h4>
+                            </div>
+                        </a>
+                    `;
                 }).join('');
-            } catch (error) { slider.innerHTML = '<div class="p-10 text-center text-zinc-400 italic">Establishing secure news link...</div>'; }
-        }
-
-        // PROJECT REVOLVER
-        function initializeCardRevolver() {
-            const cardWellness = document.getElementById('card-wellness');
-            const cardWorship = document.getElementById('card-worship');
-            setInterval(() => {
-                cardWellness.style.opacity = '0';
-                cardWorship.style.opacity = '0';
-                setTimeout(() => {
-                    const orderW = cardWellness.style.order;
-                    cardWellness.style.order = cardWorship.style.order;
-                    cardWorship.style.order = orderW;
-                    cardWellness.style.opacity = '1';
-                    cardWorship.style.opacity = '1';
-                }, 1000);
-            }, 8000);
-        }
-
-        function toggleLegal(show) { document.getElementById('legal-modal').style.display = show ? 'flex' : 'none'; }
-
-        function initializeOasis() {
-            fetchBroadBriefing();
-            initializeCardRevolver();
+            } catch (e) {
+                slider.innerHTML = '<p class="text-zinc-400 italic">Syncing news images...</p>';
+            }
         }
     </script>
 </body>
