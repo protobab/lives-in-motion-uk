@@ -32,35 +32,40 @@
             overflow: hidden; box-shadow: 0 40px 70px -15px rgba(0, 0, 0, 0.5);
         }
 
-        /* PROJECT TILES (SHRUNK) */
+        /* PROJECT TILES */
         .project-row {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
             max-width: 1200px; margin: 30px auto; padding: 0 24px;
         }
         .static-card {
-            height: 180px; border-radius: 20px; overflow: hidden; position: relative;
+            height: 160px; border-radius: 20px; overflow: hidden; position: relative;
             display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; color: white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: transform 0.3s ease;
         }
-        .static-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); z-index: 1; }
+        .static-card:hover { transform: translateY(-5px); }
+        .static-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); z-index: 1; }
 
-        /* VISUAL NEWS FEED - SHORTENED */
+        /* VISUAL NEWS FEED - SHORT & SNAPPY */
         .news-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 16px; padding: 20px 0; scrollbar-width: none; }
         .news-slider::-webkit-scrollbar { display: none; }
         
         .visual-news-card {
-            flex: 0 0 280px; scroll-snap-align: start; height: 260px; border-radius: 20px;
+            flex: 0 0 260px; scroll-snap-align: start; height: 220px; border-radius: 20px;
             overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 1.2rem; color: white; transition: transform 0.3s ease;
+            padding: 1.2rem; color: white;
         }
-        .visual-news-card:hover { transform: translateY(-5px); }
         .visual-news-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         .visual-news-card::after { 
             content: ''; position: absolute; inset: 0; 
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, transparent 100%); 
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 30%, transparent 100%); 
             z-index: 1; 
         }
         .news-info { position: relative; z-index: 2; }
+
+        /* ENGAGEMENT FOOTER */
+        .foot-tile { background: white; border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
+        .foot-tile:hover { border-color: var(--lim-blue); background: #f8fafc; }
+        #legal-modal { background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; z-index: 9999; }
     </style>
 </head>
 <body onload="fetchMixedNews()">
@@ -91,9 +96,9 @@
                     <div>
                         <div class="flex items-center gap-3 mb-4">
                             <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                            <span class="text-[10px] font-black text-red-500 uppercase tracking-[0.2em]">The Diaspora Voice</span>
+                            <span class="text-[10px] font-black text-red-500 uppercase tracking-[0.2em]">Live on Air</span>
                         </div>
-                        <h3 class="text-3xl font-black italic text-white uppercase mb-4 leading-tight">Lives In Motion Radio</h3>
+                        <h3 class="text-3xl font-black italic text-white uppercase mb-4 leading-tight">The Diaspora Voice</h3>
                         <p class="text-xs text-zinc-400 serif italic leading-relaxed">Real lives, Authentic stories, Enlivening conversations and Spiritual food for your journey of life.</p>
                     </div>
                     <div class="bg-white/5 p-5 rounded-3xl border border-white/10">
@@ -130,18 +135,55 @@
     </section>
 
     <section id="news" class="py-16 px-6 max-w-7xl mx-auto">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-2xl font-black italic uppercase tracking-tighter">The <span class="text-sky-500">Global Briefing</span></h3>
-            <span class="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Mixed: Christian • African • World</span>
-        </div>
+        <h3 class="text-2xl font-black italic uppercase tracking-tighter mb-6">The <span class="text-sky-500">Global Briefing</span></h3>
         <div id="news-slider" class="news-slider">
-            <p class="text-zinc-400 italic">Mixing news streams...</p>
+            <p class="text-zinc-400 italic">Syncing Nigerian, Christian, and World streams...</p>
         </div>
     </section>
 
-    <footer class="py-12 border-t border-zinc-100 bg-zinc-50/30 text-center">
-        <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400">© 2026 Lives In Motion Ltd | UK Registered Outreach</p>
+    <footer class="py-16 px-6 border-t border-zinc-100 bg-zinc-50/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center mb-12">
+                <div>
+                    <h2 class="text-2xl font-black italic uppercase mb-2">Lives In Motion</h2>
+                    <p class="serif text-lg text-zinc-500 italic mb-2">Registered in the United Kingdom.</p>
+                    <p class="text-lim-green font-black uppercase text-xs tracking-[0.2em]">Real Lives, Real Motion, Real Service.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="https://wa.me/2349031167282" target="_blank" class="foot-tile">
+                        <i class="fa-brands fa-whatsapp text-emerald-500 text-xl"></i>
+                        <span class="text-[10px] font-black uppercase">Studio WhatsApp</span>
+                    </a>
+                    <a href="https://www.instagram.com/livesinmotion26" target="_blank" class="foot-tile">
+                        <i class="fa-brands fa-instagram text-pink-500 text-xl"></i>
+                        <span class="text-[10px] font-black uppercase">Instagram</span>
+                    </a>
+                    <div onclick="toggleLegal(true)" class="foot-tile">
+                        <i class="fa-solid fa-scale-balanced text-sky-500 text-xl"></i>
+                        <span class="text-[10px] font-black uppercase">Privacy & Legal</span>
+                    </div>
+                    <a href="https://www.patreon.com/cw/LivesInMotion/membership" target="_blank" class="foot-tile border-amber-300 bg-amber-50">
+                        <i class="fa-brands fa-patreon text-amber-600 text-xl"></i>
+                        <span class="text-[10px] font-black uppercase">Patreon Membership</span>
+                    </a>
+                </div>
+            </div>
+            <p class="text-[9px] font-bold text-zinc-400 uppercase tracking-widest text-center">© 2026 Lives In Motion Ltd | UK Registered Media Outreach</p>
+        </div>
     </footer>
+
+    <div id="legal-modal" class="fixed inset-0 flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-lg rounded-3xl p-10 shadow-2xl relative border-t-8 border-sky-500">
+            <h2 class="text-2xl font-black italic uppercase mb-6">Legal & Compliance</h2>
+            <div class="serif text-xs text-zinc-600 space-y-4 leading-relaxed overflow-y-auto max-h-[50vh] pr-4">
+                <p><strong>1. UK Compliance:</strong> Lives In Motion Ltd is a UK-registered entity. All digital outreach complies with UK GDPR standards.</p>
+                <p><strong>2. AI Wellness:</strong> Our Wellness Assistant is an informational tool only. It is not a substitute for clinical medical advice.</p>
+                <p><strong>3. Media Ownership:</strong> All original worship and sound content are the intellectual property of Lives In Motion Ltd.</p>
+                <p><strong>4. Membership:</strong> Patreon support constitutes a voluntary gift to maintain our global diaspora media initiatives.</p>
+            </div>
+            <button onclick="toggleLegal(false)" class="mt-8 bg-zinc-900 text-white py-3 rounded-full font-black text-[10px] uppercase w-full tracking-widest">Close</button>
+        </div>
+    </div>
 
     <script>
         function openTab(tabId) {
@@ -155,25 +197,24 @@
             const slider = document.getElementById('news-slider');
             const rssApi = 'https://api.rss2json.com/v1/api.json?rss_url=';
             
-            // Explicit mixed feeds
+            // Balanced streams: Nigeria, Christian, and World
             const feeds = [
-                'https://news.google.com/rss/search?q=Global+Christian+News&hl=en-GB&gl=GB&ceid=GB:en', // Christian
-                'https://news.google.com/rss/search?q=Africa+Top+News+Politics+Culture&hl=en-GB&gl=GB&ceid=GB:en', // African
-                'https://news.google.com/rss/search?q=Global+World+News+Today&hl=en-GB&gl=GB&ceid=GB:en' // World
+                'https://news.google.com/rss/search?q=Nigeria+News+Politics+Economy&hl=en-NG&gl=NG&ceid=NG:en', // Nigeria Focus
+                'https://news.google.com/rss/search?q=Global+Christian+Church+News&hl=en-GB&gl=GB&ceid=GB:en', // Christian Focus
+                'https://news.google.com/rss/search?q=Africa+Business+Technology+News&hl=en-GB&gl=GB&ceid=GB:en' // Africa/World Focus
             ];
             
             try {
                 const responses = await Promise.all(feeds.map(f => fetch(rssApi + encodeURIComponent(f))));
                 const results = await Promise.all(responses.map(r => r.json()));
                 
-                // Shuffle items from all feeds
                 let mixedItems = [];
-                results.forEach(res => { if(res.items) mixedItems = [...mixedItems, ...res.items.slice(0,6)]; });
+                results.forEach(res => { if(res.items) mixedItems = [...mixedItems, ...res.items.slice(0,8)]; });
                 mixedItems.sort(() => Math.random() - 0.5);
 
                 slider.innerHTML = mixedItems.map(item => {
-                    // Try to extract image or use category-specific fallbacks
-                    const newsImage = item.thumbnail || item.enclosure?.link || `https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=400`;
+                    const fallbackImg = `https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=400`;
+                    const newsImage = item.thumbnail || item.enclosure?.link || fallbackImg;
                     
                     return `
                         <a href="${item.link}" target="_blank" class="visual-news-card">
@@ -185,9 +226,11 @@
                     `;
                 }).join('');
             } catch (e) {
-                slider.innerHTML = '<p class="text-zinc-400 italic">Connecting to streams...</p>';
+                slider.innerHTML = '<p class="text-zinc-400 italic">Connecting to briefing streams...</p>';
             }
         }
+
+        function toggleLegal(show) { document.getElementById('legal-modal').style.display = show ? 'flex' : 'none'; }
     </script>
 </body>
 </html>
