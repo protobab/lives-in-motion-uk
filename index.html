@@ -16,48 +16,38 @@
             clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
         }
 
-        /* Ecosystem Layout Rejig */
+        /* Command Center Layout */
         .ecosystem-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            max-width: 1200px;
-            margin: -64px auto 0;
-            padding: 0 24px;
-        }
-        @underline lg {
-            .ecosystem-grid { grid-template-columns: 300px 1fr 300px; align-items: center; }
+            display: grid; grid-template-columns: 1fr; gap: 24px;
+            max-width: 1400px; margin: -100px auto 0; padding: 0 24px;
         }
         @media (min-width: 1024px) {
-            .ecosystem-grid { grid-template-columns: 300px 1fr 300px; align-items: center; }
+            .ecosystem-grid { grid-template-columns: 320px 1fr 320px; align-items: start; }
         }
 
-        .side-card {
-            height: 300px; border-radius: 24px; overflow: hidden; position: relative;
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; color: white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        .side-panel {
+            height: 480px; border-radius: 32px; overflow: hidden; position: relative;
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem; color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .center-focus-card {
-            height: 420px; border-radius: 32px; overflow: hidden; position: relative;
-            display: flex; flex-direction: column; justify-content: center; padding: 2rem; color: white;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 4px solid rgba(255,255,255,0.1);
-            background: url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200') center/cover;
-        }
+        .side-panel::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); z-index: 1; }
 
-        .side-card::before, .center-focus-card::before {
-            content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2)); z-index: 1;
+        /* THE RADIO HUB */
+        .radio-hub {
+            background: #0f172a; border-radius: 40px; overflow: hidden;
+            display: grid; grid-template-columns: 1fr; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.4);
         }
+        @media (min-width: 768px) { .radio-hub { grid-template-columns: 350px 1fr; } }
 
-        /* News Slider Styling */
-        .news-slider {
-            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-            gap: 20px; padding: 20px 0; scrollbar-width: none;
-        }
+        .schedule-container { height: 480px; overflow-y: auto; background: #ffffff; }
+
+        /* News Slider */
+        .news-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 20px 0; scrollbar-width: none; }
         .news-slider::-webkit-scrollbar { display: none; }
         .news-slide {
             flex: 0 0 300px; scroll-snap-align: start; background: #fafafa; border-top: 4px solid var(--lim-blue);
             padding: 20px; border-radius: 12px; height: 210px; display: flex; flex-direction: column; justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         #legal-modal { background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; z-index: 9999; }
@@ -66,49 +56,58 @@
 </head>
 <body onload="fetchBroadBriefing()">
 
-    <header class="hero-banner pt-10 pb-32 px-6 text-white text-center">
+    <header class="hero-banner pt-10 pb-40 px-6 text-white text-center">
         <nav class="max-w-7xl mx-auto flex justify-between items-center mb-16">
             <h1 class="text-3xl font-black italic tracking-tighter uppercase">Lives <span class="text-sky-300">In</span> Motion</h1>
             <div class="hidden md:flex gap-8 text-[10px] font-black uppercase tracking-widest">
-                <a href="#projects" class="hover:text-sky-300 transition">Ecosystem</a>
-                <a href="#news" class="hover:text-sky-300 transition">Global Briefing</a>
-                <a href="https://livesinmotion26.myshopify.com" class="bg-white text-lim-green px-5 py-2 rounded-full font-bold shadow-lg">Shop</a>
+                <a href="#projects" class="hover:text-sky-300 transition">Command Center</a>
+                <a href="#news" class="hover:text-sky-300 transition">The Briefing</a>
+                <a href="https://patreon.com" class="bg-amber-400 text-black px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition-transform">Support on Patreon</a>
             </div>
         </nav>
-
         <div class="max-w-4xl mx-auto">
             <h2 class="text-5xl md:text-8xl font-black italic uppercase leading-none mb-6">Enjoying <br>the Journey.</h2>
-            <p class="serif text-xl md:text-2xl italic opacity-95 mb-8">Creative Media • Christian Outreach • Diasporan Oasis</p>
+            <p class="serif text-xl md:text-2xl italic opacity-95">Creative Media • Christian Outreach • Diasporan Oasis</p>
         </div>
     </header>
 
     <section id="projects" class="ecosystem-grid">
         
-        <div class="side-card" style="background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=600') center/cover;">
+        <div class="side-panel" style="background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=600') center/cover;">
             <div class="relative z-10">
                 <span class="bg-emerald-600 text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase tracking-widest">Wellness AI</span>
-                <h3 class="text-xl font-black italic uppercase mb-4">Health Concierge</h3>
-                <a href="https://healthcare.easylinkcloud.online/easy-link-assistant/" target="_blank" class="bg-white text-black py-2 rounded-full font-black text-[9px] uppercase block text-center shadow-lg">Launch Assistant</a>
+                <h3 class="text-2xl font-black italic uppercase mb-4">Health <br>Concierge</h3>
+                <a href="https://healthcare.easylinkcloud.online/easy-link-assistant/" target="_blank" class="bg-white text-black py-3 rounded-full font-black text-[10px] uppercase block text-center shadow-lg">Access Assistant</a>
             </div>
         </div>
 
-        <div class="center-focus-card">
-            <div class="relative z-10 text-center">
-                <div class="inline-flex items-center gap-2 bg-sky-500 text-white text-[10px] font-black px-4 py-1.5 rounded-full mb-6 uppercase tracking-[0.2em] animate-pulse">
-                    <i class="fa-solid fa-tower-broadcast"></i> On Air: Diaspora Radio
+        <div class="radio-hub">
+            <div class="p-8 flex flex-col justify-center bg-zinc-900 text-white border-b md:border-b-0 md:border-r border-white/10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em]">Live Broadcast</span>
                 </div>
-                <h3 class="text-4xl md:text-5xl font-black italic uppercase mb-8 tracking-tighter">Your Journey's <br><span class="text-sky-400">Soundtrack</span></h3>
-                <div class="bg-white/10 backdrop-blur-xl p-4 rounded-3xl border border-white/20">
-                    <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/embed?allow_popup=1&continuous=1" frameborder="0" style="width: 100%; height: 120px; border-radius: 16px;"></iframe>
+                <h3 class="text-3xl font-black italic uppercase mb-6 leading-tight">Diaspora <br><span class="text-sky-400">Radio</span></h3>
+                <div class="bg-white/5 p-4 rounded-2xl mb-6">
+                    <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/embed?allow_popup=1&continuous=1" frameborder="0" style="width: 100%; height: 130px; border-radius: 12px;"></iframe>
                 </div>
+                <p class="text-[10px] text-zinc-400 serif italic">Validating the diasporan journey through sound and spirit.</p>
+            </div>
+            
+            <div class="schedule-container">
+                <div class="sticky top-0 bg-white p-4 border-b flex justify-between items-center z-20">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Weekly Programming</span>
+                    <i class="fa-solid fa-calendar-days text-sky-500"></i>
+                </div>
+                <iframe src="https://azuracast-nuremberg.myautodj.com/public/station_8321_1775290855/schedule/embed" frameborder="0" allowtransparency="true" style="width: 100%; height: 800px; border: 0;"></iframe>
             </div>
         </div>
 
-        <div class="side-card" style="background: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=600') center/cover;">
+        <div class="side-panel" style="background: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=600') center/cover;">
             <div class="relative z-10">
                 <span class="bg-lim-green text-[9px] font-black px-3 py-1 rounded-full mb-3 inline-block uppercase tracking-widest">Global Outreach</span>
-                <h3 class="text-xl font-black italic uppercase mb-4">Media & Worship</h3>
-                <button class="bg-white/20 text-white border border-white/40 py-2 rounded-full font-black text-[9px] uppercase w-full backdrop-blur-sm">Opening Soon</button>
+                <h3 class="text-2xl font-black italic uppercase mb-4">Media & <br>Worship</h3>
+                <button class="bg-white/20 text-white border border-white/40 py-3 rounded-full font-black text-[10px] uppercase w-full backdrop-blur-sm">Opening Soon</button>
             </div>
         </div>
     </section>
@@ -119,13 +118,9 @@
                 <h3 class="text-3xl font-black italic uppercase tracking-tighter">The Briefing</h3>
                 <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em]">Nigeria • International • Christian • Technology</p>
             </div>
-            <div class="flex items-center gap-4">
-                <a href="https://diasporainmotion.com" target="_blank" class="text-[10px] font-black uppercase text-sky-500 underline tracking-widest">Diaspora Square</a>
-            </div>
         </div>
-        
         <div id="news-slider" class="news-slider">
-            <div class="p-10 text-center text-zinc-300 italic w-full">Connecting to global data streams...</div>
+            <div class="p-10 text-center text-zinc-300 italic w-full">Syncing global data streams...</div>
         </div>
     </section>
 
@@ -150,13 +145,13 @@
                         <i class="fa-solid fa-scale-balanced text-sky-500 text-xl"></i>
                         <span class="text-[10px] font-black uppercase">Privacy & Legal</span>
                     </div>
-                    <a href="https://livesinmotion26.myshopify.com" target="_blank" class="foot-tile">
-                        <i class="fa-solid fa-cart-shopping text-amber-500 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase">Official Shop</span>
+                    <a href="https://patreon.com" target="_blank" class="foot-tile border-amber-200 bg-amber-50">
+                        <i class="fa-brands fa-patreon text-amber-600 text-xl"></i>
+                        <span class="text-[10px] font-black uppercase">Join on Patreon</span>
                     </a>
                 </div>
             </div>
-            <p class="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">© 2026 Lives In Motion Ltd | All Rights Reserved.</p>
+            <p class="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">© 2026 Lives In Motion Ltd | UK Registered Outreach</p>
         </div>
     </footer>
 
@@ -167,7 +162,7 @@
                 <p><strong>1. UK Compliance:</strong> Lives In Motion Ltd is a UK-registered entity. We process all data under UK GDPR to ensure your journey remains secure.</p>
                 <p><strong>2. AI Wellness:</strong> Our AI Concierge is a wellness tool, not a medical diagnosis. All queries are anonymous.</p>
                 <p><strong>3. Media Rights:</strong> All worship and creative content are the property of Lives In Motion Ltd.</p>
-                <p><strong>4. Community Honor:</strong> The Diaspora Town Square is for validation. Harassment is strictly prohibited.</p>
+                <p><strong>4. Community Honor:</strong> Support via Patreon constitutes a voluntary gift to support the media outreach and diaspora community initiatives of Lives In Motion Ltd.</p>
             </div>
             <button onclick="toggleLegal(false)" class="mt-8 bg-zinc-900 text-white py-3 rounded-full font-black text-[10px] uppercase w-full tracking-widest">Close</button>
         </div>
@@ -177,51 +172,26 @@
         async function fetchBroadBriefing() {
             const slider = document.getElementById('news-slider');
             const api = 'https://api.rss2json.com/v1/api.json?rss_url=';
-            
             const queries = [
                 'https://news.google.com/rss/search?q=Global+Breaking+News+Politics+Technology&hl=en-GB&gl=GB&ceid=GB:en',
                 'https://news.google.com/rss/search?q=Nigeria+Breaking+News+Politics+Culture&hl=en-NG&gl=NG&ceid=NG:en',
                 'https://news.google.com/rss/search?q=Global+Christian+News+Mission+Faith&hl=en-GB&gl=GB&ceid=GB:en'
             ];
-
             try {
                 const responses = await Promise.all(queries.map(q => fetch(api + encodeURIComponent(q))));
                 const results = await Promise.all(responses.map(r => r.json()));
-                
-                let allItems = [...results[0].items, ...results[1].items, ...results[2].items];
-                allItems.sort(() => Math.random() - 0.5);
-
+                let allItems = [...results[0].items, ...results[1].items, ...results[2].items].sort(() => Math.random() - 0.5);
                 slider.innerHTML = allItems.slice(0, 18).map(item => {
                     const isNaija = item.link.includes('.ng') || item.title.toLowerCase().includes('nigeria');
                     const isChristian = item.title.toLowerCase().includes('church') || item.title.toLowerCase().includes('faith') || item.title.toLowerCase().includes('christian');
-                    
-                    let label = 'WORLD UPDATE';
-                    let color = 'text-sky-500';
-                    
+                    let label = 'WORLD UPDATE', color = 'text-sky-500';
                     if (isNaija) { label = 'NIGERIA DIRECT'; color = 'text-emerald-600'; }
                     if (isChristian) { label = 'GLOBAL FAITH'; color = 'text-amber-500'; }
-
-                    return `
-                        <div class="news-slide">
-                            <div>
-                                <span class="text-[9px] font-black ${color} tracking-widest uppercase mb-2 block">${label}</span>
-                                <h4 class="font-bold text-sm leading-tight text-zinc-800 line-clamp-4">${item.title}</h4>
-                            </div>
-                            <a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase text-zinc-400 hover:text-black transition">
-                                View →
-                            </a>
-                        </div>
-                    `;
+                    return `<div class="news-slide"><div><span class="text-[9px] font-black ${color} tracking-widest uppercase mb-2 block">${label}</span><h4 class="font-bold text-sm leading-tight text-zinc-800 line-clamp-4">${item.title}</h4></div><a href="${item.link}" target="_blank" class="text-[10px] font-black uppercase text-zinc-400 hover:text-black transition">View →</a></div>`;
                 }).join('');
-
-            } catch (error) {
-                slider.innerHTML = '<div class="p-10 text-center text-zinc-400 italic">Syncing global data streams... Please wait.</div>';
-            }
+            } catch (error) { slider.innerHTML = '<div class="p-10 text-center text-zinc-400 italic">Offline Briefing...</div>'; }
         }
-
-        function toggleLegal(show) {
-            document.getElementById('legal-modal').style.display = show ? 'flex' : 'none';
-        }
+        function toggleLegal(show) { document.getElementById('legal-modal').style.display = show ? 'flex' : 'none'; }
     </script>
 </body>
 </html>
